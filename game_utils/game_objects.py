@@ -1,6 +1,5 @@
 from kivy.graphics.vertex_instructions import Rectangle, Ellipse
 from kivy.graphics.context_instructions import Color
-from kivy.metrics import dp
 
 
 class Spaceship:
