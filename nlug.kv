@@ -1,3 +1,32 @@
-MainWidget:
+<NlugScreenManager>:
+    ScreenWelcome:
+    ScreenScore:
+    ScreenGame:
 
-<MainWidget>:
+<ScreenWelcome>:
+    name: 'welcome'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Welcome to N-lug'
+        Button:
+            text: 'Start Game'
+            on_press: app.root.current = 'game'
+        Button:
+            text: 'Scores'
+            on_press: app.root.current = 'score'
+
+<ScreenScore>:
+    name: 'score'
+    BoxLayout:
+        orientation: 'vertical'
+        Button:
+            text: 'Go back'
+            on_press: app.root.current = 'welcome'
+
+
+<ScreenGame>:
+    name: 'game'
+    #Button:
+    #    text: 'Quit'
+    #    on_press: print("quitting the game")
