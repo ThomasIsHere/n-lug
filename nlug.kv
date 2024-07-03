@@ -4,7 +4,6 @@
     ScreenGame:
 
 <ScreenWelcome>:
-    name: 'welcome'
     BoxLayout:
         orientation: 'vertical'
         Label:
@@ -13,20 +12,53 @@
             text: 'Start Game'
             on_press: app.root.current = 'game'
         Button:
+            size_hint: 1, 1
             text: 'Scores'
             on_press: app.root.current = 'score'
 
 <ScreenScore>:
-    name: 'score'
     BoxLayout:
         orientation: 'vertical'
-        Button:
-            text: 'Go back'
-            on_press: app.root.current = 'welcome'
-
+        BoxLayout:
+            Button:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: '48dp'
+                text: 'Go back'
+                on_press: app.root.current = 'welcome'
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'Score ................... 0000001'
+            Label:
+                text: 'Score ................... 0000001'
+            Label:
+                text: 'Score ................... 0000001'
+            Label:
+                text: 'Score ................... 0000001'
+            Label:
+                text: 'Score ................... 0000001'
+            Label:
+                text: 'Score ................... 0000001'
 
 <ScreenGame>:
-    name: 'game'
-    #Button:
-    #    text: 'Quit'
-    #    on_press: print("quitting the game")
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: '48dp'
+            Button:
+                text: 'Quit'
+                on_press: app.root.current = 'welcome'
+            Label:
+                text: 'Lives: I I I'
+            Label:
+                text: 'Fuel:'
+            ProgressBar:
+                id: progress_bar
+                max: 100
+                value: 0
+            Label:
+                text: 'Score: 105'
+        GameWidget:

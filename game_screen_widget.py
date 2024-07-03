@@ -11,7 +11,7 @@ from kivy.uix.screenmanager import Screen
 class ScreenGame(Screen):
     def __init__(self, **kwargs):
         super(ScreenGame, self).__init__(**kwargs)
-        self.add_widget(GameWidget())
+        #self.add_widget(GameWidget())
 
 class GameWidget(Widget):
     from game_utils.game_player_actions import on_touch_down, on_touch_up, on_touch_move
