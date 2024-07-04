@@ -1,17 +1,15 @@
-from kivy.uix.widget import Widget
-from kivy.properties import Clock
 from kivy.metrics import dp
-
+from kivy.properties import Clock
+from kivy.uix.screenmanager import Screen
+from kivy.uix.widget import Widget
 
 from game_utils.game_methods import init_spaceship
-from game_utils.game_objects import Spaceship
 
-from kivy.uix.screenmanager import Screen
 
 class ScreenGame(Screen):
     def __init__(self, **kwargs):
         super(ScreenGame, self).__init__(**kwargs)
-        #self.add_widget(GameWidget())
+
 
 class GameWidget(Widget):
     from game_utils.game_player_actions import on_touch_down, on_touch_up, on_touch_move
@@ -23,7 +21,7 @@ class GameWidget(Widget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED)
+        self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400)
         self.dict_destination = {
                                 "go_to_x": 400, 
                                 "go_to_y": 400, 

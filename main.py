@@ -4,6 +4,7 @@ Config.set('graphics', 'height', '540')
 
 
 from kivy.app import App
+
 from screen_manager import NlugScreenManager
 
 
