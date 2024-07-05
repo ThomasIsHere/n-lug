@@ -10,7 +10,6 @@ def on_touch_down(self, touch):
 
 
 def update_spaceship_destination(self, touch):
-    print(self.spaceship.fuel)
     if touch.x < 0:
         go_to_x = 0
     elif touch.x > self.width - dp(40):

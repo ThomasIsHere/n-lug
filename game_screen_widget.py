@@ -1,12 +1,15 @@
 from kivy.metrics import dp
-from kivy.properties import Clock
+from kivy.properties import Clock, NumericProperty
+from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
+
 
 from game_utils.game_methods import init_spaceship
 
 
 class ScreenGame(Screen):
+    fuel_value = NumericProperty(0)
     def __init__(self, **kwargs):
         super(ScreenGame, self).__init__(**kwargs)
 
@@ -16,12 +19,12 @@ class GameWidget(Widget):
 
     dict_destination = None
     spaceship = None
+    fuel_value = NumericProperty(0)
 
     SPACESHIP_SPEED = dp(100)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.is_moving = False
         self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400, 100.0, 3)
         self.dict_destination = {
                                 "go_to_x": 400, 
@@ -73,3 +76,5 @@ class GameWidget(Widget):
             self.spaceship.fuel -=1
         elif self.spaceship.fuel < 100 and not is_moving:
             self.spaceship.fuel +=.5
+
+        self.fuel_value = self.spaceship.fuel

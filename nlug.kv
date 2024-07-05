@@ -43,23 +43,10 @@
                 text: 'Score ................... 0000001'
 
 <ScreenGame>:
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint_y: None
-            height: '48dp'
-            Button:
-                text: 'Quit'
-                on_press: app.root.current = 'welcome'
-            Label:
-                text: 'Lives: I I I'
-            Label:
-                text: 'Fuel:'
-            ProgressBar:
-                id: progress_bar
-                max: 100
-                value: 0
-            Label:
-                text: 'Score: 105'
-        GameWidget:
+    GameWidget:
+
+
+<GameWidget>:
+    ProgressBar:
+        max: 100
+        value: root.fuel_value
