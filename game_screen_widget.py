@@ -17,16 +17,18 @@ class GameWidget(Widget):
     dict_destination = None
     spaceship = None
 
-    SPACESHIP_SPEED = dp(250)
+    SPACESHIP_SPEED = dp(100)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400)
+        self.is_moving = False
+        self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400, 100.0, 3)
         self.dict_destination = {
                                 "go_to_x": 400, 
                                 "go_to_y": 400, 
                                 "speed_corrector_x": 1.0, 
-                                "speed_corrector_y": 1.0
+                                "speed_corrector_y": 1.0,
+                                "is_moving": False
                                 }
         Clock.schedule_interval(self.update, 1.0 / 60.0)
 
@@ -42,10 +44,11 @@ class GameWidget(Widget):
             self.dict_destination["go_to_y"],
             self.dict_destination["speed_corrector_x"],
             self.dict_destination["speed_corrector_y"],
+            self.dict_destination["is_moving"],
             dt
             )
 
-    def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, dt):
+    def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
         x, y = self.spaceship.body.pos
 
         x_speed = dp(10) * speed_corrector_x * dt * 60
@@ -65,4 +68,8 @@ class GameWidget(Widget):
         else:
             y = go_y
 
-        self.spaceship.body.pos = (x, y)
+        if self.spaceship.fuel > 1 and is_moving:
+            self.spaceship.body.pos = (x, y)
+            self.spaceship.fuel -=1
+        elif self.spaceship.fuel < 100 and not is_moving:
+            self.spaceship.fuel +=.5
