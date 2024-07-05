@@ -9,7 +9,6 @@ from game_utils.game_methods import init_spaceship
 
 
 class ScreenGame(Screen):
-    fuel_value = NumericProperty(0)
     def __init__(self, **kwargs):
         super(ScreenGame, self).__init__(**kwargs)
 
