@@ -1,5 +1,5 @@
 from kivy.metrics import dp
-from kivy.properties import Clock, NumericProperty
+from kivy.properties import Clock, NumericProperty, ObjectProperty
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget

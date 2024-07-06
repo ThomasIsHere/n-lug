@@ -1,8 +1,9 @@
 <NlugScreenManager>:
-    ScreenGame:
+    #ScreenGame:
     ScreenWelcome:
     ScreenScore:
-    #ScreenGame:
+    ScreenGame:
+
 
 <ScreenWelcome>:
     BoxLayout:
@@ -16,6 +17,7 @@
             size_hint: 1, 1
             text: 'Scores'
             on_press: app.root.current = 'score'
+
 
 <ScreenScore>:
     BoxLayout:
@@ -42,11 +44,15 @@
             Label:
                 text: 'Score ................... 0000001'
 
+
 <ScreenGame>:
     GameWidget:
 
 
 <GameWidget>:
-    ProgressBar:
-        max: 100
-        value: root.fuel_value
+    BoxLayout:
+        #size_hint: None, None
+        pos: root.width - self.width, root.height - self.height
+        ProgressBar:
+            value: root.fuel_value
+            #pos: root.width - self.width, root.height - self.height

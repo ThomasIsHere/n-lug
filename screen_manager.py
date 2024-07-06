@@ -1,7 +1,8 @@
 from kivy.uix.screenmanager import ScreenManager
+
+from game_screen_widget import ScreenGame
 from screen_score import ScreenScore
 from screen_welcome import ScreenWelcome
-from game_screen_widget import ScreenGame
 
 
 class NlugScreenManager(ScreenManager):
