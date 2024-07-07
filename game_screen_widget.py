@@ -1,16 +1,19 @@
 from kivy.metrics import dp
-from kivy.properties import Clock, NumericProperty, ObjectProperty
+from kivy.properties import Clock, NumericProperty, ObjectProperty, StringProperty
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
 
 
+
 from game_utils.game_methods import init_spaceship, init_enemy, is_collision, enemy_random_move
+
 
 
 class ScreenGame(Screen):
     def __init__(self, **kwargs):
         super(ScreenGame, self).__init__(**kwargs)
+
 
 
 class GameWidget(Widget):
@@ -20,8 +23,10 @@ class GameWidget(Widget):
     spaceship = None
     enemy = None
     fuel_value = NumericProperty(0)
+    lives_remaining = StringProperty("")
 
     SPACESHIP_SPEED = dp(100)
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -34,13 +39,16 @@ class GameWidget(Widget):
                                 "speed_corrector_y": 1.0,
                                 "is_moving": False
                                 }
+        self.lives_remaining = str(self.spaceship.lives)
         Clock.schedule_interval(self.update, 1.0 / 60.0)
+
 
     #  'win', 'linux', 'android', 'macosx', 'ios' or 'unknown'
     '''def is_desktop(self):
         if platform in ('linux', 'win', 'macosx'):
             return True
         return False'''
+
 
     def update(self, dt):
         self.spaceship_moves_to(
@@ -51,8 +59,12 @@ class GameWidget(Widget):
             self.dict_destination["is_moving"],
             dt
             )
-        print(is_collision(self.spaceship, self.enemy))
-        print(enemy_random_move(self, self.enemy))
+        
+        if is_collision(self.spaceship, self.enemy):
+            self.spaceship.lives -=1
+            self.lives_remaining = str(self.spaceship.lives)
+        enemy_random_move(self, self.enemy)
+
 
     def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
         x, y = self.spaceship.body.pos

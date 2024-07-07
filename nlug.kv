@@ -51,8 +51,8 @@
 
 <GameWidget>:
     BoxLayout:
-        #size_hint: None, None
         pos: root.width - self.width, root.height - self.height
         ProgressBar:
             value: root.fuel_value
-            #pos: root.width - self.width, root.height - self.height
+        Label:
+            text: root.lives_remaining
