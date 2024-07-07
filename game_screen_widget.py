@@ -5,7 +5,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
 
 
-from game_utils.game_methods import init_spaceship, init_enemy, is_collision
+from game_utils.game_methods import init_spaceship, init_enemy, is_collision, enemy_random_move
 
 
 class ScreenGame(Screen):
@@ -52,6 +52,7 @@ class GameWidget(Widget):
             dt
             )
         print(is_collision(self.spaceship, self.enemy))
+        print(enemy_random_move(self, self.enemy))
 
     def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
         x, y = self.spaceship.body.pos

@@ -15,6 +15,9 @@ class Spaceship(GameObjet):
 
 
 class Enemy(GameObjet):
-    def __init__(self, body: Ellipse, speed: int):
+    def __init__(self, body: Ellipse, speed_x: int, speed_y: int, right: bool, up: bool):
         self.body = body
-        self.speed = speed
+        self.speed_x = speed_x
+        self.speed_y = speed_y
+        self.right = right
+        self.up = up

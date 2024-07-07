@@ -2,6 +2,7 @@ from kivy.graphics.vertex_instructions import Rectangle, Ellipse
 from kivy.graphics.context_instructions import Color
 from kivy.metrics import dp
 from math import sqrt, pow
+from random import randint
 
 
 from .game_objects import GameObjet, Spaceship, Enemy
@@ -19,12 +20,39 @@ def init_enemy(self) -> Enemy:
       with self.canvas:
             Color(1, 0, 0)
             body = Ellipse(pos=(500, 500), size=(40, 40))
-            enemy = Enemy(body, 0)
+            enemy = Enemy(body, 10, 10, True, True)
             return enemy
-      
 
-def enemy_random_move(self) -> tuple[int, int]:
-      return (0,0)
+
+def enemy_random_move(self, e: Enemy):
+      x, y = e.body.pos
+      w, h = e.body.size
+
+      if x + w <= self.width and e.right:
+            x+=e.speed_x
+      elif x >= 0 and not e.right:
+            x-=e.speed_x
+
+      if x + w > self.width and e.right:
+            e.right = False
+            e.speed_x = randint(1, 10)
+      elif x < 0 and not e.right:
+            e.right = True
+            e.speed_x = randint(1, 10)
+      
+      if y + h <= self.height and e.up:
+            y+=e.speed_y
+      elif y >= 0 and not e.up:
+            y-=e.speed_y
+
+      if y + h > self.height and e.up:
+            e.up = False
+            e.speed_y = randint(1, 10)
+      elif y < 0 and not e.up:
+            e.up = True
+            e.speed_y = randint(1, 10)
+
+      e.body.pos = (x, y)
 
 
 def is_collision(obj1: GameObjet, obj2: GameObjet) -> bool:
