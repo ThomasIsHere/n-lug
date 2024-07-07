@@ -6,7 +6,7 @@ from kivy.uix.widget import Widget
 
 
 
-from game_utils.game_methods import init_spaceship, init_enemy, is_collision, enemy_random_move
+from game_utils.game_methods import init_spaceship, init_enemy, is_collision, enemy_random_move, enemy_change_direction
 
 
 
@@ -63,14 +63,15 @@ class GameWidget(Widget):
         if is_collision(self.spaceship, self.enemy):
             self.spaceship.lives -=1
             self.lives_remaining = str(self.spaceship.lives)
+            enemy_change_direction(self.enemy)
         enemy_random_move(self, self.enemy)
 
 
     def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
         x, y = self.spaceship.body.pos
 
-        x_speed = dp(10) * speed_corrector_x * dt * 60
-        y_speed = dp(10) * speed_corrector_y * dt * 60
+        x_speed = 30 * speed_corrector_x * dt * 60
+        y_speed = 30 * speed_corrector_y * dt * 60
 
         if x < go_x:
             x += x_speed
@@ -88,7 +89,7 @@ class GameWidget(Widget):
 
         if self.spaceship.fuel > 1 and is_moving:
             self.spaceship.body.pos = (x, y)
-            self.spaceship.fuel -=1
+            self.spaceship.fuel -=.7
         elif self.spaceship.fuel < 100 and not is_moving:
             self.spaceship.fuel +=.5
 

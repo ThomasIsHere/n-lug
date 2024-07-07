@@ -55,6 +55,11 @@ def enemy_random_move(self, e: Enemy):
       e.body.pos = (x, y)
 
 
+def enemy_change_direction(e: Enemy):
+      e.up = not e.up
+      e.right = not e.right
+
+
 def is_collision(obj1: GameObjet, obj2: GameObjet) -> bool:
       x1, y1 = obj1.body.pos
       w1, h1 = obj1.body.size
