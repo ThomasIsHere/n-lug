@@ -5,7 +5,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
 
 
-from game_utils.game_methods import init_spaceship
+from game_utils.game_methods import init_spaceship, init_enemy, is_collision
 
 
 class ScreenGame(Screen):
@@ -18,12 +18,14 @@ class GameWidget(Widget):
 
     dict_destination = None
     spaceship = None
+    enemy = None
     fuel_value = NumericProperty(0)
 
     SPACESHIP_SPEED = dp(100)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.enemy = init_enemy(self)
         self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400, 100.0, 3)
         self.dict_destination = {
                                 "go_to_x": 400, 
@@ -49,6 +51,7 @@ class GameWidget(Widget):
             self.dict_destination["is_moving"],
             dt
             )
+        print(is_collision(self.spaceship, self.enemy))
 
     def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
         x, y = self.spaceship.body.pos
