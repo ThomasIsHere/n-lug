@@ -7,11 +7,12 @@ class GameObjet:
 
 
 class Spaceship(GameObjet):
-    def __init__(self, body: Ellipse, speed: int, fuel: float, lives: int):
+    def __init__(self, body: Ellipse, speed: int, fuel: float, lives: int, timer_immortal: int):
         self.body = body
         self.speed = speed
         self.fuel = fuel
         self.lives = lives
+        self.timer_immortal = timer_immortal
 
 
 class Enemy(GameObjet):

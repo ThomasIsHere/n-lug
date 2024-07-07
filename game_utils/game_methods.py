@@ -12,7 +12,7 @@ def init_spaceship(self, speed: int, start_x: int, start_y: int, fuel: int, live
         with self.canvas:
             Color(1, 1, 1)
             body = Ellipse(pos=(start_x, start_y), size=(dp(40), dp(40)))
-            spaceship = Spaceship(body, speed, fuel, lives)
+            spaceship = Spaceship(body, speed, fuel, lives, 0)
             return spaceship
 
 

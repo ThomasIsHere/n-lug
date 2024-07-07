@@ -59,11 +59,8 @@ class GameWidget(Widget):
             self.dict_destination["is_moving"],
             dt
             )
-        
-        if is_collision(self.spaceship, self.enemy):
-            self.spaceship.lives -=1
-            self.lives_remaining = str(self.spaceship.lives)
-            enemy_change_direction(self.enemy)
+        self.collision_handler_spaceship_enemy()
+        self.immortal_timer_handler()
         enemy_random_move(self, self.enemy)
 
 
@@ -94,3 +91,18 @@ class GameWidget(Widget):
             self.spaceship.fuel +=.5
 
         self.fuel_value = self.spaceship.fuel
+
+
+    def collision_handler_spaceship_enemy(self):
+        if is_collision(self.spaceship, self.enemy):
+            enemy_change_direction(self.enemy)
+            if self.spaceship.timer_immortal <= 0:
+                self.spaceship.lives -=1
+                self.lives_remaining = str(self.spaceship.lives)
+                self.spaceship.timer_immortal = 240
+
+
+    def immortal_timer_handler(self):
+        print(self.spaceship.timer_immortal)
+        if self.spaceship.timer_immortal > 0:
+            self.spaceship.timer_immortal -=1
