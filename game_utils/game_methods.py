@@ -10,26 +10,27 @@ from typing import List
 from .game_objects import GameObjet, Spaceship, Enemy
 
 
-def init_spaceship(self, speed: int, start_x: int, start_y: int, fuel: int, lives: int) -> Spaceship:
-        with self.canvas:
+def init_spaceship(screen: Screen, speed: int, start_x: int, start_y: int, fuel: int, lives: int) -> Spaceship:
+        with screen.canvas:
             Color(1, 1, 1)
             body = Ellipse(pos=(start_x, start_y), size=(dp(40), dp(40)))
             spaceship = Spaceship(body, speed, fuel, lives, 0)
             return spaceship
 
 
-def __init_enemy(self) -> Enemy:
-      with self.canvas:
+def __init_enemy(screen: Screen) -> Enemy:
+      with screen.canvas:
             Color(1, 0, 0)
             body = Ellipse(pos=(500, 500), size=(40, 40))
             enemy = Enemy(body, 10, 10, True, True)
             return enemy
 
 
-def init_enemies(self, num: int) -> List[Enemy]:
+def init_enemies(screen: Screen, num: int) -> List[Enemy]:
       list_enemies = []
-      for i in range(0, num):
-            list_enemies.append(__init_enemy(self))
+      while(num > 0):
+            list_enemies.append(__init_enemy(screen))
+            num-=1
       return list_enemies
 
 
