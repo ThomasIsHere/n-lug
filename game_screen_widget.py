@@ -6,8 +6,13 @@ from kivy.uix.widget import Widget
 
 from typing import List
 
-from game_utils.game_methods import init_spaceship, is_collision, enemy_random_move, enemy_change_direction, init_enemies, collision_handler_spaceship_enemies
 from game_utils.game_objects import Enemy
+from game_utils.game_methods import (
+    init_spaceship,
+    enemy_random_move,
+    init_enemies,
+    collision_handler_spaceship_enemies
+    )
 
 
 
@@ -31,8 +36,8 @@ class GameWidget(Widget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400, 100.0, 3, 0)
         self.enemies = init_enemies(self, 10)
-        self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400, 100.0, 3)
         self.dict_destination = {
                                 "go_to_x": 400, 
                                 "go_to_y": 400, 
@@ -95,7 +100,6 @@ class GameWidget(Widget):
 
 
     def immortal_timer_handler(self):
-        print(self.spaceship.timer_immortal)
         if self.spaceship.timer_immortal > 0:
             self.spaceship.timer_immortal -=1
 
