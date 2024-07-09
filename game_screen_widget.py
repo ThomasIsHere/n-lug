@@ -11,7 +11,8 @@ from game_utils.game_methods import (
     init_spaceship,
     enemy_random_move,
     init_enemies,
-    collision_handler_spaceship_enemies
+    collision_handler_spaceship_enemies,
+    collision_handler_between_enemies
     )
 
 
@@ -66,6 +67,7 @@ class GameWidget(Widget):
             dt
             )
         collision_handler_spaceship_enemies(self, self.spaceship, self.enemies)
+        collision_handler_between_enemies(self, self.enemies)
         self.immortal_timer_handler()
         self.enemies_random_move_handler(self.enemies)
 

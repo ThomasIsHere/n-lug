@@ -139,3 +139,11 @@ def __collision_handler_spaceship_enemy(screen: Screen, spaceship: Spaceship, en
 def collision_handler_spaceship_enemies(screen: Screen, spaceship: Spaceship, lenemies: List[Enemy]):
       for e in lenemies:
             __collision_handler_spaceship_enemy(screen, spaceship, e)
+
+
+def collision_handler_between_enemies(screen: Screen, lenemies: List[Enemy]):
+      for e1 in lenemies:
+            for e2 in lenemies:
+                  if e1 is not e2:
+                        if __is_collision(e1, e2):
+                              enemy_change_direction(e1)
