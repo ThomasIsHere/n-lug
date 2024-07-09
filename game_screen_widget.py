@@ -4,9 +4,10 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
 
+from typing import List
 
-
-from game_utils.game_methods import init_spaceship, init_enemy, is_collision, enemy_random_move, enemy_change_direction
+from game_utils.game_methods import init_spaceship, is_collision, enemy_random_move, enemy_change_direction, init_enemies, collision_handler_spaceship_enemies
+from game_utils.game_objects import Enemy
 
 
 
@@ -21,7 +22,7 @@ class GameWidget(Widget):
 
     dict_destination = None
     spaceship = None
-    enemy = None
+    enemies = None
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
 
@@ -30,7 +31,7 @@ class GameWidget(Widget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.enemy = init_enemy(self)
+        self.enemies = init_enemies(self, 10)
         self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400, 100.0, 3)
         self.dict_destination = {
                                 "go_to_x": 400, 
@@ -59,9 +60,9 @@ class GameWidget(Widget):
             self.dict_destination["is_moving"],
             dt
             )
-        self.collision_handler_spaceship_enemy()
+        collision_handler_spaceship_enemies(self, self.spaceship, self.enemies)
         self.immortal_timer_handler()
-        enemy_random_move(self, self.enemy)
+        self.enemies_random_move_handler(self.enemies)
 
 
     def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
@@ -93,16 +94,12 @@ class GameWidget(Widget):
         self.fuel_value = self.spaceship.fuel
 
 
-    def collision_handler_spaceship_enemy(self):
-        if is_collision(self.spaceship, self.enemy):
-            enemy_change_direction(self.enemy)
-            if self.spaceship.timer_immortal <= 0:
-                self.spaceship.lives -=1
-                self.lives_remaining = str(self.spaceship.lives)
-                self.spaceship.timer_immortal = 240
-
-
     def immortal_timer_handler(self):
         print(self.spaceship.timer_immortal)
         if self.spaceship.timer_immortal > 0:
             self.spaceship.timer_immortal -=1
+
+
+    def enemies_random_move_handler(self, le: List[Enemy]):
+        for e in le:
+            enemy_random_move(self, e)

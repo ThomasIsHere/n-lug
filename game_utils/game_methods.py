@@ -1,9 +1,11 @@
 from kivy.graphics.vertex_instructions import Rectangle, Ellipse
 from kivy.graphics.context_instructions import Color
+from kivy.uix.screenmanager import Screen
 from kivy.metrics import dp
 from math import sqrt, pow
 from random import randint
 
+from typing import List
 
 from .game_objects import GameObjet, Spaceship, Enemy
 
@@ -16,7 +18,7 @@ def init_spaceship(self, speed: int, start_x: int, start_y: int, fuel: int, live
             return spaceship
 
 
-def init_enemy(self) -> Enemy:
+def __init_enemy(self) -> Enemy:
       with self.canvas:
             Color(1, 0, 0)
             body = Ellipse(pos=(500, 500), size=(40, 40))
@@ -24,28 +26,35 @@ def init_enemy(self) -> Enemy:
             return enemy
 
 
-def enemy_random_move(self, e: Enemy):
+def init_enemies(self, num: int) -> List[Enemy]:
+      list_enemies = []
+      for i in range(0, num):
+            list_enemies.append(__init_enemy(self))
+      return list_enemies
+
+
+def enemy_random_move(s: Screen, e: Enemy):
       x, y = e.body.pos
       w, h = e.body.size
 
-      if x + w <= self.width and e.right:
+      if x + w <= s.width and e.right:
             x+=e.speed_x
       elif x >= 0 and not e.right:
             x-=e.speed_x
 
-      if x + w > self.width and e.right:
+      if x + w > s.width and e.right:
             e.right = False
             e.speed_x = randint(1, 10)
       elif x < 0 and not e.right:
             e.right = True
             e.speed_x = randint(1, 10)
       
-      if y + h <= self.height and e.up:
+      if y + h <= s.height and e.up:
             y+=e.speed_y
       elif y >= 0 and not e.up:
             y-=e.speed_y
 
-      if y + h > self.height and e.up:
+      if y + h > s.height and e.up:
             e.up = False
             e.speed_y = randint(1, 10)
       elif y < 0 and not e.up:
@@ -74,3 +83,17 @@ def is_collision(obj1: GameObjet, obj2: GameObjet) -> bool:
 
 def distance_spaceship_with_enemy(s: Spaceship, e: Enemy) -> int:
       return None
+
+
+def __collision_handler_spaceship_enemy(screen: Screen, spaceship: Spaceship, enemy: Enemy):
+        if is_collision(spaceship, enemy):
+            enemy_change_direction(enemy)
+            if spaceship.timer_immortal <= 0:
+                spaceship.lives -=1
+                screen.lives_remaining = str(spaceship.lives)
+                screen.spaceship.timer_immortal = 4 * 60 # 4 * 60 fps
+
+
+def collision_handler_spaceship_enemies(screen: Screen, spaceship: Spaceship, lenemies: List[Enemy]):
+      for e in lenemies:
+            __collision_handler_spaceship_enemy(screen, spaceship, e)
