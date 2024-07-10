@@ -21,7 +21,7 @@ from .game_constants import (
 
 
 def init_spaceship(
-            screen: Screen, 
+            screen: Screen,
             speed: int, 
             start_x: int, 
             start_y: int, 
@@ -57,6 +57,7 @@ def __init_enemy(screen: Screen) -> Enemy:
 
 
 def __return_enemy_random_init_pos(screen: Screen) -> tuple[int, int]:
+      print(screen.enemies)
       enemy_x = randint(0, SCREEN_WIDTH - int(ENEMY_WIDTH))
       enemy_y = randint(0, SCREEN_HEIGHT - int(ENEMY_HEIGHT))
       spaceship_x, spaceship_y = screen.spaceship.body.pos

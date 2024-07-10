@@ -1,4 +1,10 @@
 from kivy.metrics import dp
+from kivy.clock import Clock
+
+from .game_constants import (
+      SPACESHIP_HEIGHT,
+      SPACESHIP_WIDTH
+      )
 
 
 def on_touch_move(self, touch):
@@ -9,20 +15,33 @@ def on_touch_down(self, touch):
     update_spaceship_destination(self, touch)
 
 
+'''def __do_not_touch_spaceship(self, touch) -> bool:
+    x, y = self.spaceship.body.pos
+    center_x = x + SPACESHIP_WIDTH /2
+    center_y = y + SPACESHIP_HEIGHT /2
+    if (
+        (center_x - SPACESHIP_WIDTH < touch.x and touch.x < center_x + SPACESHIP_WIDTH)
+        and (center_y - SPACESHIP_HEIGHT < touch.y and touch.y < center_y + SPACESHIP_HEIGHT)
+    ):
+        return False
+    else:
+        return True'''
+
+
 def update_spaceship_destination(self, touch):
     if touch.x < 0:
         go_to_x = 0
-    elif touch.x > self.width - dp(40):
-        go_to_x = self.width - dp(40)
+    elif touch.x > self.width - SPACESHIP_WIDTH:
+        go_to_x = self.width - SPACESHIP_WIDTH
     else:
-        go_to_x = int(touch.x)
+        go_to_x = touch.x
     
     if touch.y < 0:
         go_to_y = 0
-    elif touch.y > self.height - dp(40):
-        go_to_y = self.height - dp(40)
+    elif touch.y > self.height - SPACESHIP_HEIGHT:
+        go_to_y = self.height - SPACESHIP_HEIGHT
     else:
-        go_to_y = int(touch.y)
+        go_to_y = touch.y
 
     x, y = self.spaceship.body.pos
     dx = abs(x - touch.x)

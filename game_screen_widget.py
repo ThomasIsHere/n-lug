@@ -1,6 +1,4 @@
-from kivy.metrics import dp
-from kivy.properties import Clock, NumericProperty, ObjectProperty, StringProperty
-from kivy.uix.progressbar import ProgressBar
+from kivy.properties import Clock, NumericProperty, StringProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
 
@@ -14,6 +12,17 @@ from game_utils.game_methods import (
     collision_handler_spaceship_enemies,
     collision_handler_between_enemies
     )
+from game_utils.game_constants import (
+      SPACESHIP_SPEED,
+      SPACESHIP_MAX_FUEL_100,
+      SPACESHIP_FUEL_DECREASE,
+      SPACESHIP_FUEL_INCREASE,
+      SPACESHIP_START_LIVES,
+      SCREEN_HEIGHT,
+      SCREEN_WIDTH,
+      FPS
+      )
+
 
 
 
@@ -32,22 +41,28 @@ class GameWidget(Widget):
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
 
-    SPACESHIP_SPEED = dp(100)
-
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.spaceship = init_spaceship(self, self.SPACESHIP_SPEED, 400, 400, 100.0, 3, 0)
-        self.enemies = init_enemies(self, 10)
+        self.spaceship = init_spaceship(
+                self,
+                SPACESHIP_SPEED,
+                SCREEN_WIDTH / 2,
+                SCREEN_HEIGHT / 2,
+                SPACESHIP_MAX_FUEL_100,
+                SPACESHIP_START_LIVES,
+                0
+            )
+        self.enemies = init_enemies(self, 1)
         self.dict_destination = {
-                                "go_to_x": 400, 
-                                "go_to_y": 400, 
-                                "speed_corrector_x": 1.0, 
-                                "speed_corrector_y": 1.0,
+                                "go_to_x": SCREEN_WIDTH / 2, 
+                                "go_to_y": SCREEN_HEIGHT / 2, 
+                                "speed_corrector_x": 0.0, 
+                                "speed_corrector_y": 0.0,
                                 "is_moving": False
                                 }
         self.lives_remaining = str(self.spaceship.lives)
-        Clock.schedule_interval(self.update, 1.0 / 60.0)
+        Clock.schedule_interval(self.update, 1.0 / FPS)
 
 
     #  'win', 'linux', 'android', 'macosx', 'ios' or 'unknown'
@@ -75,8 +90,8 @@ class GameWidget(Widget):
     def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
         x, y = self.spaceship.body.pos
 
-        x_speed = 30 * speed_corrector_x * dt * 60
-        y_speed = 30 * speed_corrector_y * dt * 60
+        x_speed = SPACESHIP_SPEED * speed_corrector_x * dt * FPS
+        y_speed = SPACESHIP_SPEED * speed_corrector_y * dt * FPS
 
         if x < go_x:
             x += x_speed
@@ -94,9 +109,9 @@ class GameWidget(Widget):
 
         if self.spaceship.fuel > 1 and is_moving:
             self.spaceship.body.pos = (x, y)
-            self.spaceship.fuel -=.7
-        elif self.spaceship.fuel < 100 and not is_moving:
-            self.spaceship.fuel +=.5
+            self.spaceship.fuel -= SPACESHIP_FUEL_DECREASE
+        elif self.spaceship.fuel < SPACESHIP_MAX_FUEL_100 and not is_moving:
+            self.spaceship.fuel += SPACESHIP_FUEL_INCREASE
 
         self.fuel_value = self.spaceship.fuel
 
