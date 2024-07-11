@@ -15,7 +15,7 @@ def on_touch_down(self, touch):
     update_spaceship_destination(self, touch)
 
 
-'''def __do_not_touch_spaceship(self, touch) -> bool:
+'''def do_not_touch_spaceship(self, touch) -> bool:
     x, y = self.spaceship.body.pos
     center_x = x + SPACESHIP_WIDTH /2
     center_y = y + SPACESHIP_HEIGHT /2

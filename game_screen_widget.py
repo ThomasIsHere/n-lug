@@ -10,7 +10,8 @@ from game_utils.game_methods import (
     enemy_random_move,
     init_enemies,
     collision_handler_spaceship_enemies,
-    collision_handler_between_enemies
+    collision_handler_between_enemies,
+    do_not_touch_spaceship
     )
 from game_utils.game_constants import (
       SPACESHIP_SPEED,
@@ -92,20 +93,21 @@ class GameWidget(Widget):
 
         x_speed = SPACESHIP_SPEED * speed_corrector_x * dt * FPS
         y_speed = SPACESHIP_SPEED * speed_corrector_y * dt * FPS
-
-        if x < go_x:
-            x += x_speed
-        elif x > go_x:
-            x -= x_speed
-        else:
-            x = go_x
         
-        if y < go_y:
-            y += y_speed
-        elif y > go_y:
-            y -= y_speed
-        else:
-            y = go_y
+        if do_not_touch_spaceship(self, self.dict_destination["go_to_x"], self.dict_destination["go_to_y"]):
+            if x < go_x:
+                x += x_speed
+            elif x > go_x:
+                x -= x_speed
+            else:
+                x = go_x
+            
+            if y < go_y:
+                y += y_speed
+            elif y > go_y:
+                y -= y_speed
+            else:
+                y = go_y
 
         if self.spaceship.fuel > 1 and is_moving:
             self.spaceship.body.pos = (x, y)

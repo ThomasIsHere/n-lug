@@ -148,3 +148,16 @@ def collision_handler_between_enemies(screen: Screen, lenemies: List[Enemy]):
                   if e1 is not e2:
                         if __is_collision(e1, e2):
                               enemy_change_direction(e1)
+
+
+def do_not_touch_spaceship(screen: Screen, go_x: int, go_y: int) -> bool:
+    x, y = screen.spaceship.body.pos
+    center_x = x + SPACESHIP_WIDTH /2
+    center_y = y + SPACESHIP_HEIGHT /2
+    if (
+        (center_x - SPACESHIP_WIDTH < go_x and go_x < center_x + SPACESHIP_WIDTH)
+        and (center_y - SPACESHIP_HEIGHT < go_y and go_y < center_y + SPACESHIP_HEIGHT)
+    ):
+        return False
+    else:
+        return True
