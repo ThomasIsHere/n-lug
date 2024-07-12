@@ -54,7 +54,7 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.enemies = init_enemies(self, 1)
+        self.enemies = init_enemies(self, 100)
         self.dict_destination = {
                                 "go_to_x": SCREEN_WIDTH / 2, 
                                 "go_to_y": SCREEN_HEIGHT / 2, 

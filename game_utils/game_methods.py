@@ -1,7 +1,6 @@
-from kivy.graphics.vertex_instructions import Rectangle, Ellipse
+from kivy.graphics.vertex_instructions import Ellipse
 from kivy.graphics.context_instructions import Color
 from kivy.uix.screenmanager import Screen
-from kivy.metrics import dp
 from math import sqrt, pow
 from random import randint, choice
 
@@ -35,7 +34,7 @@ def init_spaceship(
                         pos=(start_x, start_y),
                         size=(SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
                   )
-            spaceship = Spaceship(body, speed, fuel, lives, timer_immortal)
+            spaceship = Spaceship(body, [], speed, fuel, lives, timer_immortal)
             return spaceship
 
 
@@ -48,6 +47,7 @@ def __init_enemy(screen: Screen) -> Enemy:
                   )
             enemy = Enemy(
                   body,
+                  [],
                   randint(1, ENEMY_MAX_SPEED),
                   randint(1, ENEMY_MAX_SPEED),
                   choice([True, False]),
@@ -57,7 +57,6 @@ def __init_enemy(screen: Screen) -> Enemy:
 
 
 def __return_enemy_random_init_pos(screen: Screen) -> tuple[int, int]:
-      print(screen.enemies)
       enemy_x = randint(0, SCREEN_WIDTH - int(ENEMY_WIDTH))
       enemy_y = randint(0, SCREEN_HEIGHT - int(ENEMY_HEIGHT))
       spaceship_x, spaceship_y = screen.spaceship.body.pos
@@ -117,8 +116,68 @@ def __is_collision(obj1: GameObjet, obj2: GameObjet) -> bool:
       w1, h1 = obj1.body.size
       x2, y2 = obj2.body.pos
       w2, h2 = obj2.body.size
-      d = __distance_2_points(x1, y1, x2, y2) - w1 / 2 - w2 /2
+
+      obj1_left = False
+      obj1_down = False
+
+      if x1 < x2:
+            obj1_left = True
+
+      if y1 < y2:
+            obj1_down = True
+
+      diameter_sub = 0.0
+
+      if obj1_left and obj1_down:
+            diameter_sub = w1
+      elif not obj1_left and obj1_down:
+            diameter_sub = w1
+      elif not obj1_left and not obj1_down:
+            diameter_sub = w2
+      elif obj1_left and not obj1_down:
+            diameter_sub = w2
+
+      d = __distance_2_points(x1, y1, x2, y2) - diameter_sub
       if d < 0:
+            return True
+      else:
+            return False
+      
+
+def __overlap(obj1: GameObjet, obj2: GameObjet) -> bool:
+      x1, y1 = obj1.body.pos
+      w1, h1 = obj1.body.size
+      x2, y2 = obj2.body.pos
+      w2, h2 = obj2.body.size
+
+      x_overlap = False
+      y_overlap = False
+      overlap = False
+
+      if (
+            __point_in_range(x1, x2, x2 + w2) 
+            or __point_in_range(x1 + w1, x2, x2 + w2)
+            or __point_in_range(x2, x1, x1 + w1)
+            or __point_in_range(x2 + w2, x1, x1 + w1)
+            ):
+            x_overlap = True
+
+      if (
+            __point_in_range(y1, y2, y2 + h2) 
+            or __point_in_range(y1 + h1, y2, y2 + h2)
+            or __point_in_range(y2, y1, y1 + h1) 
+            or __point_in_range(y2 + h2, y1, y1 + h1)
+            ):
+            y_overlap = True
+
+      if x_overlap and y_overlap:
+            overlap = True
+      
+      return overlap
+
+
+def __point_in_range(p1, p2, p3):
+      if p1 >= p2 and p1 <= p3:
             return True
       else:
             return False
@@ -129,8 +188,14 @@ def __distance_2_points(x1, y1, x2, y2) -> float:
 
 
 def __collision_handler_spaceship_enemy(screen: Screen, spaceship: Spaceship, enemy: Enemy):
-        if __is_collision(spaceship, enemy):
-            enemy_change_direction(enemy)
+      if not __overlap(spaceship, enemy) and enemy in spaceship.listOverlap:
+                  spaceship.listOverlap.remove(enemy)
+      if __is_collision(spaceship, enemy):
+            __spaceship_stops(screen)
+            if enemy not in spaceship.listOverlap:
+                  enemy_change_direction(enemy)
+            if __overlap(spaceship, enemy) and enemy not in spaceship.listOverlap:
+                  spaceship.listOverlap.append(enemy)
             if spaceship.timer_immortal <= 0:
                 spaceship.lives -=1
                 screen.lives_remaining = str(spaceship.lives)
@@ -146,8 +211,13 @@ def collision_handler_between_enemies(screen: Screen, lenemies: List[Enemy]):
       for e1 in lenemies:
             for e2 in lenemies:
                   if e1 is not e2:
+                        if not __overlap(e1, e2) and e2 in e1.listOverlap:
+                              e1.listOverlap.remove(e2)
                         if __is_collision(e1, e2):
-                              enemy_change_direction(e1)
+                              if e2 not in e1.listOverlap:
+                                    enemy_change_direction(e1)
+                              if __overlap(e1, e2) and e2 not in e1.listOverlap:
+                                    e1.listOverlap.append(e2)
 
 
 def do_not_touch_spaceship(screen: Screen, go_x: int, go_y: int) -> bool:
@@ -161,3 +231,14 @@ def do_not_touch_spaceship(screen: Screen, go_x: int, go_y: int) -> bool:
         return False
     else:
         return True
+
+
+def __spaceship_stops(screen: Screen):
+      x, y = screen.spaceship.body.pos
+      screen.dict_destination = {
+                                "go_to_x": x, 
+                                "go_to_y": y, 
+                                "speed_corrector_x": 0.0, 
+                                "speed_corrector_y": 0.0,
+                                "is_moving": False
+                             }
