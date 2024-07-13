@@ -15,19 +15,6 @@ def on_touch_down(self, touch):
     update_spaceship_destination(self, touch)
 
 
-'''def do_not_touch_spaceship(self, touch) -> bool:
-    x, y = self.spaceship.body.pos
-    center_x = x + SPACESHIP_WIDTH /2
-    center_y = y + SPACESHIP_HEIGHT /2
-    if (
-        (center_x - SPACESHIP_WIDTH < touch.x and touch.x < center_x + SPACESHIP_WIDTH)
-        and (center_y - SPACESHIP_HEIGHT < touch.y and touch.y < center_y + SPACESHIP_HEIGHT)
-    ):
-        return False
-    else:
-        return True'''
-
-
 def update_spaceship_destination(self, touch):
     if touch.x < 0:
         go_to_x = 0
