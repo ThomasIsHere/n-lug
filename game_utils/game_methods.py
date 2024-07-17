@@ -29,7 +29,7 @@ def init_spaceship(
             timer_immortal: int
             ) -> Spaceship:
         with screen.canvas:
-            Color(1, 1, 1) # white
+            screen.spaceship_canvas_color = Color(1, 1, 1) # white
             body = Ellipse(
                         pos=(start_x, start_y),
                         size=(SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
@@ -242,3 +242,10 @@ def __spaceship_stops(screen: Screen):
                                 "speed_corrector_y": 0.0,
                                 "is_moving": False
                              }
+      
+
+def immortal_color_handler(screen: Screen, spaceship: Spaceship):
+      if spaceship.timer_immortal <= 0:
+            screen.spaceship_canvas_color.rgba = (1, 1, 1, 1) # white
+      else:
+            screen.spaceship_canvas_color.rgba = (1, 1, 1, .4) # white 60% transparent

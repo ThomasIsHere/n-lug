@@ -26,9 +26,4 @@ sudo apt-get install sdkmanager
 And unzip commandlinetools-linux-6514223_latest.zip from 
 sdkmanager path "/home/u/.buildozer/android/platform/android-sdk/
 
-
-
-
-
-
- buildozer android debug => build apk (no need to run as sudo)
+buildozer android debug => build apk (no need to run as sudo)

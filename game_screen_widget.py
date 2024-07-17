@@ -4,14 +4,15 @@ from kivy.uix.widget import Widget
 
 from typing import List
 
-from game_utils.game_objects import Enemy
+from game_utils.game_objects import Enemy, Asteroid
 from game_utils.game_methods import (
     init_spaceship,
     enemy_random_move,
     init_enemies,
     collision_handler_spaceship_enemies,
     collision_handler_between_enemies,
-    do_not_touch_spaceship
+    do_not_touch_spaceship,
+    immortal_color_handler
     )
 from game_utils.game_constants import (
       SPACESHIP_SPEED,
@@ -41,10 +42,13 @@ class GameWidget(Widget):
     enemies = None
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
+    spaceship_canvas_color = None
 
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        a = Asteroid(None, None, None)
+        a.init_asteroid_canvas(self)
         self.spaceship = init_spaceship(
                 self,
                 SPACESHIP_SPEED,
@@ -54,7 +58,7 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.enemies = init_enemies(self, 100)
+        self.enemies = init_enemies(self, 10)
         self.dict_destination = {
                                 "go_to_x": SCREEN_WIDTH / 2, 
                                 "go_to_y": SCREEN_HEIGHT / 2, 
@@ -84,6 +88,7 @@ class GameWidget(Widget):
             )
         collision_handler_spaceship_enemies(self, self.spaceship, self.enemies)
         collision_handler_between_enemies(self, self.enemies)
+        immortal_color_handler(self, self.spaceship)
         self.immortal_timer_handler()
         self.enemies_random_move_handler(self.enemies)
 
