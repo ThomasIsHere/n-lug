@@ -34,6 +34,3 @@ class Asteroid(GameObjet):
         x_center = x + w /2
         y_center = y + h /2
         return (x_center, y_center)
-    
-    def move(self, speed_x, speed_y):
-        super().move(speed_x, speed_y)
