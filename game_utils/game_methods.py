@@ -6,7 +6,6 @@ from random import randint, choice
 
 from typing import List
 
-from .game_objects.go import GameObjet
 from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
 from .game_constants import (
@@ -110,45 +109,6 @@ def enemy_random_move(s: Screen, e: Enemy):
 def enemy_change_direction(e: Enemy):
       e.up = not e.up
       e.right = not e.right
-
-
-def overlap(obj1: GameObjet, obj2: GameObjet) -> bool:
-      x1, y1 = obj1.body.pos
-      w1, h1 = obj1.body.size
-      x2, y2 = obj2.body.pos
-      w2, h2 = obj2.body.size
-
-      x_overlap = False
-      y_overlap = False
-      overlap = False
-
-      if (
-            __point_in_range(x1, x2, x2 + w2) 
-            or __point_in_range(x1 + w1, x2, x2 + w2)
-            or __point_in_range(x2, x1, x1 + w1)
-            or __point_in_range(x2 + w2, x1, x1 + w1)
-            ):
-            x_overlap = True
-
-      if (
-            __point_in_range(y1, y2, y2 + h2) 
-            or __point_in_range(y1 + h1, y2, y2 + h2)
-            or __point_in_range(y2, y1, y1 + h1) 
-            or __point_in_range(y2 + h2, y1, y1 + h1)
-            ):
-            y_overlap = True
-
-      if x_overlap and y_overlap:
-            overlap = True
-      
-      return overlap
-
-
-def __point_in_range(p1, p2, p3):
-      if p1 >= p2 and p1 <= p3:
-            return True
-      else:
-            return False
 
 
 def distance_2_points(x1, y1, x2, y2) -> float:

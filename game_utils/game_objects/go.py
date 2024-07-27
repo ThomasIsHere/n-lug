@@ -27,7 +27,7 @@ class GameObjet:
         y += speed_y
         self.body.pos = (x, y)
     
-    def collied_with(self, other_go) -> bool:
+    def collied_with(self, other_go: 'GameObjet') -> bool:
       x1, y1 = self.body.pos
       w1, h1 = self.body.size
       x2, y2 = other_go.body.pos
@@ -62,3 +62,42 @@ class GameObjet:
 
     def __distance_2_points(self, x1, y1, x2, y2) -> float:
         return sqrt(pow(x1-x2,2) + pow(y1-y2,2))
+    
+
+    def overlap(self, other_go: 'GameObjet') -> bool:
+      x1, y1 = self.body.pos
+      w1, h1 = self.body.size
+      x2, y2 = other_go.body.pos
+      w2, h2 = other_go.body.size
+
+      x_overlap = False
+      y_overlap = False
+      overlap = False
+
+      if (
+            self.__point_in_range(x1, x2, x2 + w2) 
+            or self.__point_in_range(x1 + w1, x2, x2 + w2)
+            or self.__point_in_range(x2, x1, x1 + w1)
+            or self.__point_in_range(x2 + w2, x1, x1 + w1)
+            ):
+            x_overlap = True
+
+      if (
+            self.__point_in_range(y1, y2, y2 + h2) 
+            or self.__point_in_range(y1 + h1, y2, y2 + h2)
+            or self.__point_in_range(y2, y1, y1 + h1) 
+            or self.__point_in_range(y2 + h2, y1, y1 + h1)
+            ):
+            y_overlap = True
+
+      if x_overlap and y_overlap:
+            overlap = True
+      
+      return overlap
+
+
+    def __point_in_range(self, p1, p2, p3):
+        if p1 >= p2 and p1 <= p3:
+                return True
+        else:
+                return False
