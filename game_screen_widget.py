@@ -4,7 +4,8 @@ from kivy.uix.widget import Widget
 
 from typing import List
 
-from game_utils.game_objects import Enemy, Asteroid
+from game_utils.game_objects.go_asteroid import Asteroid
+from game_utils.game_objects.go_enemy import Enemy
 from game_utils.game_methods import (
     init_spaceship,
     enemy_random_move,
@@ -43,12 +44,13 @@ class GameWidget(Widget):
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
     spaceship_canvas_color = None
+    a = None
 
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        a = Asteroid(None, None, None)
-        a.init_asteroid_canvas(self)
+        self.a = Asteroid(None, None, None)
+        self.a.init_asteroid_canvas(self)
         self.spaceship = init_spaceship(
                 self,
                 SPACESHIP_SPEED,
@@ -78,6 +80,7 @@ class GameWidget(Widget):
 
 
     def update(self, dt):
+        self.a.move(1, 1)
         self.spaceship_moves_to(
             self.dict_destination["go_to_x"],
             self.dict_destination["go_to_y"],

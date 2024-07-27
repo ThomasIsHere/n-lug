@@ -6,7 +6,9 @@ from random import randint, choice
 
 from typing import List
 
-from .game_objects import GameObjet, Spaceship, Enemy
+from .game_objects.go import GameObjet
+from .game_objects.go_spaceship import Spaceship
+from .game_objects.go_enemy import Enemy
 from .game_constants import (
       SPACESHIP_HEIGHT,
       SPACESHIP_WIDTH,
