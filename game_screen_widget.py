@@ -10,9 +10,11 @@ from game_utils.game_methods import (
     init_spaceship,
     enemy_random_move,
     init_enemies,
+    do_not_touch_spaceship
+    )
+from game_utils.collision_handlers import (
     collision_handler_spaceship_enemies,
     collision_handler_between_enemies,
-    do_not_touch_spaceship,
     immortal_color_handler
     )
 from game_utils.game_constants import (
