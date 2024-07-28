@@ -106,11 +106,6 @@ def enemy_random_move(s: Screen, e: Enemy):
       e.body.pos = (x, y)
 
 
-'''def enemy_change_direction(e: Enemy):
-      e.up = not e.up
-      e.right = not e.right'''
-
-
 def distance_2_points(x1, y1, x2, y2) -> float:
       return sqrt(pow(x1-x2,2) + pow(y1-y2,2))
 

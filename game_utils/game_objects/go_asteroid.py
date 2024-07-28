@@ -25,12 +25,5 @@ class Asteroid(GameObjet):
             Color(.88, .57, .39) # Brown
             self.body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))    
             Color(1, 1, 1)
-            x, y = self.__get_center_asteroid()
+            x, y = self.get_body_center()
             self.gravitational_field = Line(circle=(x, y, 100), width=.3)
-
-    def __get_center_asteroid(self) -> tuple[int, int]:
-        x, y = self.body.pos
-        w, h = self.body.size
-        x_center = x + w /2
-        y_center = y + h /2
-        return (x_center, y_center)

@@ -41,10 +41,3 @@ def collision_handler_between_enemies(screen: Screen, lenemies: List[Enemy]):
                                     e1.enemy_change_direction()
                               if e1.overlap(e2) and e2 not in e1.listOverlap:
                                     e1.listOverlap.append(e2)
-
-
-def immortal_color_handler(screen: Screen, spaceship: Spaceship):
-      if spaceship.timer_immortal <= 0:
-            screen.spaceship_canvas_color.rgba = (1, 1, 1, 1) # white
-      else:
-            screen.spaceship_canvas_color.rgba = (1, 1, 1, .4) # white 60% transparent
