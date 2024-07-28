@@ -17,7 +17,9 @@ from game_utils.handlers_collision import (
     collision_handler_between_enemies
     )
 from game_utils.handlers_other import (
-    immortal_color_handler
+    immortal_color_handler,
+    immortal_timer_handler,
+    enemies_random_move_handler
     )
 from game_utils.game_constants import (
       SPACESHIP_SPEED,
@@ -96,8 +98,8 @@ class GameWidget(Widget):
         collision_handler_spaceship_enemies(self, self.spaceship, self.enemies)
         collision_handler_between_enemies(self, self.enemies)
         immortal_color_handler(self, self.spaceship)
-        self.immortal_timer_handler()
-        self.enemies_random_move_handler(self.enemies)
+        immortal_timer_handler(self)
+        enemies_random_move_handler(self, self.enemies)
 
 
     def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
@@ -128,13 +130,3 @@ class GameWidget(Widget):
             self.spaceship.fuel += SPACESHIP_FUEL_INCREASE
 
         self.fuel_value = self.spaceship.fuel
-
-
-    def immortal_timer_handler(self):
-        if self.spaceship.timer_immortal > 0:
-            self.spaceship.timer_immortal -=1
-
-
-    def enemies_random_move_handler(self, le: List[Enemy]):
-        for e in le:
-            enemy_random_move(self, e)
