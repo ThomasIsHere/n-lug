@@ -1,7 +1,6 @@
 from kivy.graphics.vertex_instructions import Ellipse
 from kivy.graphics.context_instructions import Color
 from kivy.uix.screenmanager import Screen
-from math import sqrt, pow
 from random import randint, choice
 
 from typing import List
@@ -17,6 +16,7 @@ from .game_constants import (
       ENEMY_HEIGHT,
       ENEMY_MAX_SPEED
       )
+from .utils_methods import distance_2_points
 
 
 def init_spaceship(
@@ -73,62 +73,3 @@ def init_enemies(screen: Screen, num: int) -> List[Enemy]:
             list_enemies.append(__init_enemy(screen))
             num-=1
       return list_enemies
-
-
-def enemy_random_move(s: Screen, e: Enemy):
-      x, y = e.body.pos
-      w, h = e.body.size
-
-      if x + w <= s.width and e.right:
-            x+=e.speed_x
-      elif x >= 0 and not e.right:
-            x-=e.speed_x
-
-      if x + w > s.width and e.right:
-            e.right = False
-            e.speed_x = randint(1, ENEMY_MAX_SPEED)
-      elif x < 0 and not e.right:
-            e.right = True
-            e.speed_x = randint(1, ENEMY_MAX_SPEED)
-      
-      if y + h <= s.height and e.up:
-            y+=e.speed_y
-      elif y >= 0 and not e.up:
-            y-=e.speed_y
-
-      if y + h > s.height and e.up:
-            e.up = False
-            e.speed_y = randint(1, ENEMY_MAX_SPEED)
-      elif y < 0 and not e.up:
-            e.up = True
-            e.speed_y = randint(1, ENEMY_MAX_SPEED)
-
-      e.body.pos = (x, y)
-
-
-def distance_2_points(x1, y1, x2, y2) -> float:
-      return sqrt(pow(x1-x2,2) + pow(y1-y2,2))
-
-
-def do_not_touch_spaceship(screen: Screen, go_x: int, go_y: int) -> bool:
-    x, y = screen.spaceship.body.pos
-    center_x = x + SPACESHIP_WIDTH /2
-    center_y = y + SPACESHIP_HEIGHT /2
-    if (
-        (center_x - SPACESHIP_WIDTH < go_x and go_x < center_x + SPACESHIP_WIDTH)
-        and (center_y - SPACESHIP_HEIGHT < go_y and go_y < center_y + SPACESHIP_HEIGHT)
-    ):
-        return False
-    else:
-        return True
-
-
-def spaceship_stops(screen: Screen):
-      x, y = screen.spaceship.body.pos
-      screen.dict_destination = {
-                                "go_to_x": x, 
-                                "go_to_y": y, 
-                                "speed_corrector_x": 0.0, 
-                                "speed_corrector_y": 0.0,
-                                "is_moving": False
-                             }

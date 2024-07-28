@@ -8,6 +8,7 @@ from game_utils.game_constants import (
       SCREEN_HEIGHT,
       SCREEN_WIDTH
       )
+from game_utils.utils_methods import distance_2_points, point_in_range
 
 
 class GameObjet:
@@ -53,16 +54,12 @@ class GameObjet:
             elif self_left and not self_down:
                   diameter_sub = w2
 
-            d = self.__distance_2_points(x1, y1, x2, y2) - diameter_sub
+            d = distance_2_points(x1, y1, x2, y2) - diameter_sub
             if d < 0:
                   return True
             else:
                   return False
 
-
-      def __distance_2_points(self, x1, y1, x2, y2) -> float:
-            return sqrt(pow(x1-x2,2) + pow(y1-y2,2))
-    
 
       def overlap(self, other_go: 'GameObjet') -> bool:
             x1, y1 = self.body.pos
@@ -75,18 +72,18 @@ class GameObjet:
             overlap = False
 
             if (
-                  self.__point_in_range(x1, x2, x2 + w2) 
-                  or self.__point_in_range(x1 + w1, x2, x2 + w2)
-                  or self.__point_in_range(x2, x1, x1 + w1)
-                  or self.__point_in_range(x2 + w2, x1, x1 + w1)
+                  point_in_range(x1, x2, x2 + w2) 
+                  or point_in_range(x1 + w1, x2, x2 + w2)
+                  or point_in_range(x2, x1, x1 + w1)
+                  or point_in_range(x2 + w2, x1, x1 + w1)
                   ):
                   x_overlap = True
 
             if (
-                  self.__point_in_range(y1, y2, y2 + h2) 
-                  or self.__point_in_range(y1 + h1, y2, y2 + h2)
-                  or self.__point_in_range(y2, y1, y1 + h1) 
-                  or self.__point_in_range(y2 + h2, y1, y1 + h1)
+                  point_in_range(y1, y2, y2 + h2) 
+                  or point_in_range(y1 + h1, y2, y2 + h2)
+                  or point_in_range(y2, y1, y1 + h1) 
+                  or point_in_range(y2 + h2, y1, y1 + h1)
                   ):
                   y_overlap = True
 
@@ -95,14 +92,7 @@ class GameObjet:
             
             return overlap
 
-
-      def __point_in_range(self, p1, p2, p3):
-            if p1 >= p2 and p1 <= p3:
-                  return True
-            else:
-                  return False
         
-
       def get_body_center(self) -> tuple[int, int]:
             x, y = self.body.pos
             w, h = self.body.size

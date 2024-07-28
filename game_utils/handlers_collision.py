@@ -7,7 +7,7 @@ from .game_objects.go_enemy import Enemy
 
 from .game_constants import FPS
 
-from .game_methods import spaceship_stops
+from .utils_methods import spaceship_stops
 
 
 def __collision_handler_spaceship_enemy(screen: Screen, spaceship: Spaceship, enemy: Enemy):

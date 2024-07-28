@@ -6,11 +6,11 @@ from typing import List
 
 from game_utils.game_objects.go_asteroid import Asteroid
 from game_utils.game_objects.go_enemy import Enemy
-from game_utils.game_methods import (
+from game_utils.game_objects.go_spaceship import Spaceship
+
+from game_utils.go_init_canvas import (
     init_spaceship,
-    enemy_random_move,
-    init_enemies,
-    do_not_touch_spaceship
+    init_enemies
     )
 from game_utils.handlers_collision import (
     collision_handler_spaceship_enemies,
@@ -19,13 +19,12 @@ from game_utils.handlers_collision import (
 from game_utils.handlers_other import (
     immortal_color_handler,
     immortal_timer_handler,
-    enemies_random_move_handler
+    enemies_random_move_handler,
+    spaceship_moves_to_handler
     )
 from game_utils.game_constants import (
       SPACESHIP_SPEED,
       SPACESHIP_MAX_FUEL_100,
-      SPACESHIP_FUEL_DECREASE,
-      SPACESHIP_FUEL_INCREASE,
       SPACESHIP_START_LIVES,
       SCREEN_HEIGHT,
       SCREEN_WIDTH,
@@ -50,13 +49,10 @@ class GameWidget(Widget):
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
     spaceship_canvas_color = None
-    a = None
 
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.a = Asteroid(None, None, None)
-        self.a.init_asteroid_canvas(self)
         self.spaceship = init_spaceship(
                 self,
                 SPACESHIP_SPEED,
@@ -86,8 +82,8 @@ class GameWidget(Widget):
 
 
     def update(self, dt):
-        self.a.move(1, 1)
-        self.spaceship_moves_to(
+        spaceship_moves_to_handler(
+            self,
             self.dict_destination["go_to_x"],
             self.dict_destination["go_to_y"],
             self.dict_destination["speed_corrector_x"],
@@ -100,33 +96,3 @@ class GameWidget(Widget):
         immortal_color_handler(self, self.spaceship)
         immortal_timer_handler(self)
         enemies_random_move_handler(self, self.enemies)
-
-
-    def spaceship_moves_to(self, go_x: int, go_y: int, speed_corrector_x: float, speed_corrector_y: float, is_moving:bool, dt):
-        x, y = self.spaceship.body.pos
-
-        x_speed = SPACESHIP_SPEED * speed_corrector_x * dt * FPS
-        y_speed = SPACESHIP_SPEED * speed_corrector_y * dt * FPS
-        
-        if do_not_touch_spaceship(self, self.dict_destination["go_to_x"], self.dict_destination["go_to_y"]):
-            if x < go_x:
-                x += x_speed
-            elif x > go_x:
-                x -= x_speed
-            else:
-                x = go_x
-            
-            if y < go_y:
-                y += y_speed
-            elif y > go_y:
-                y -= y_speed
-            else:
-                y = go_y
-
-        if self.spaceship.fuel > 1 and is_moving:
-            self.spaceship.body.pos = (x, y)
-            self.spaceship.fuel -= SPACESHIP_FUEL_DECREASE
-        elif self.spaceship.fuel < SPACESHIP_MAX_FUEL_100 and not is_moving:
-            self.spaceship.fuel += SPACESHIP_FUEL_INCREASE
-
-        self.fuel_value = self.spaceship.fuel

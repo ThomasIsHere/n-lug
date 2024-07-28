@@ -18,7 +18,7 @@ class Asteroid(GameObjet):
         GameObjet.__init__(self, body, listOverlap)
         self.gravitational_field = gravitational_field
 
-    def init_asteroid_canvas(self, widget):
+    '''def init_asteroid_canvas(self, widget):
         start_x = randint(0, SCREEN_WIDTH - int(ASTEROID_WIDTH))
         start_y = randint(0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT))
         with widget.canvas:
@@ -26,4 +26,4 @@ class Asteroid(GameObjet):
             self.body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))    
             Color(1, 1, 1)
             x, y = self.get_body_center()
-            self.gravitational_field = Line(circle=(x, y, 100), width=.3)
+            self.gravitational_field = Line(circle=(x, y, 100), width=.3)'''
