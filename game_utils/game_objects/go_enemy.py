@@ -11,3 +11,7 @@ class Enemy(GameObjet):
         self.speed_y = speed_y
         self.right = right
         self.up = up
+
+    def enemy_change_direction(self):
+      self.up = not self.up
+      self.right = not self.right
