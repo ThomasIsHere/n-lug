@@ -7,6 +7,7 @@ from typing import List
 
 from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
+from .game_objects.go_asteroid import Asteroid
 from .game_constants import (
       SPACESHIP_HEIGHT,
       SPACESHIP_WIDTH,
@@ -14,7 +15,10 @@ from .game_constants import (
       SCREEN_WIDTH,
       ENEMY_WIDTH,
       ENEMY_HEIGHT,
-      ENEMY_MAX_SPEED
+      ENEMY_MAX_SPEED,
+      ASTEROID_WIDTH,
+      ASTEROID_HEIGHT,
+      ASTEROID_SPEED
       )
 from .utils_methods import distance_2_points
 
@@ -42,7 +46,7 @@ def __init_enemy(screen: Screen) -> Enemy:
       with screen.canvas:
             Color(1, 0, 0) # red
             body = Ellipse(
-                  pos=__return_enemy_random_init_pos(screen),
+                  pos=__enmy_random_init_pos_away_spaceship(screen),
                   size=(ENEMY_WIDTH, ENEMY_HEIGHT),
                   )
             enemy = Enemy(
@@ -56,15 +60,15 @@ def __init_enemy(screen: Screen) -> Enemy:
             return enemy
 
 
-def __return_enemy_random_init_pos(screen: Screen) -> tuple[int, int]:
-      enemy_x = randint(0, SCREEN_WIDTH - int(ENEMY_WIDTH))
-      enemy_y = randint(0, SCREEN_HEIGHT - int(ENEMY_HEIGHT))
+def __enmy_random_init_pos_away_spaceship(screen: Screen) -> tuple[int, int]:
+      x = randint(0, SCREEN_WIDTH - int(ENEMY_WIDTH))
+      y = randint(0, SCREEN_HEIGHT - int(ENEMY_HEIGHT))
       spaceship_x, spaceship_y = screen.spaceship.body.pos
-      d = distance_2_points(enemy_x, enemy_y, spaceship_x, spaceship_y)
+      d = distance_2_points(x, x, spaceship_x, spaceship_y)
       # enemy pops at least 4 times the distance of spaceship width
       if d > 4 * SPACESHIP_WIDTH:
-            return (enemy_x, enemy_y)
-      return __return_enemy_random_init_pos(screen)
+            return (x, y)
+      return __enmy_random_init_pos_away_spaceship(screen)
       
 
 def init_enemies(screen: Screen, num: int) -> List[Enemy]:
@@ -73,3 +77,22 @@ def init_enemies(screen: Screen, num: int) -> List[Enemy]:
             list_enemies.append(__init_enemy(screen))
             num-=1
       return list_enemies
+
+
+def init_asteroid_canvas(screen: Screen) :
+      start_x = choice([0, SCREEN_WIDTH - int(ASTEROID_WIDTH)])
+      start_y = choice([0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT)])
+      with screen.canvas:
+            Color(.88, .57, .39) # Brown
+            body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))
+            asteroid = Asteroid(
+                  body,
+                  [],
+                  None,
+                  ASTEROID_SPEED,
+                  False
+            )
+            return asteroid
+            #Color(1, 1, 1)
+            #x, y = self.get_body_center()
+            #self.gravitational_field = Line(circle=(x, y, 100), width=.3)

@@ -1,10 +1,7 @@
 from kivy.metrics import dp
 from kivy.clock import Clock
 
-from .game_constants import (
-      SPACESHIP_HEIGHT,
-      SPACESHIP_WIDTH
-      )
+from .utils_methods import speed_corrector
 
 
 def on_touch_move(self, touch):
@@ -16,31 +13,24 @@ def on_touch_down(self, touch):
 
 
 def update_spaceship_destination(self, touch):
+    w, h = self.spaceship.body.size
+
     if touch.x < 0:
         go_to_x = 0
-    elif touch.x > self.width - SPACESHIP_WIDTH:
-        go_to_x = self.width - SPACESHIP_WIDTH
+    elif touch.x > self.width - w:
+        go_to_x = self.width - h
     else:
         go_to_x = touch.x
     
     if touch.y < 0:
         go_to_y = 0
-    elif touch.y > self.height - SPACESHIP_HEIGHT:
-        go_to_y = self.height - SPACESHIP_HEIGHT
+    elif touch.y > self.height - w:
+        go_to_y = self.height - h
     else:
         go_to_y = touch.y
 
     x, y = self.spaceship.body.pos
-    dx = abs(x - touch.x)
-    dy = abs(y - touch.y)
-
-    speed_corrector_x = 1.0
-    speed_corrector_y = 1.0
-
-    if dx > dy and dx > 0:
-        speed_corrector_y = dy / dx
-    elif dy > dx and dy > 0:
-        speed_corrector_x = dx/ dy
+    speed_corrector_x, speed_corrector_y = speed_corrector(x, y, touch.x, touch.y)
 
     self.dict_destination = {
                             "go_to_x": go_to_x, 

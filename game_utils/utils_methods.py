@@ -36,3 +36,18 @@ def point_in_range(p1, p2, p3):
         return True
     else:
         return False
+    
+
+def speed_corrector(x_pos, y_pos, x_target, y_target) -> tuple[int, int]:
+    dx = abs(x_pos - x_target)
+    dy = abs(y_pos - y_target)
+
+    speed_corrector_x = 1.0
+    speed_corrector_y = 1.0
+
+    if dx > dy and dx > 0:
+        speed_corrector_y = dy / dx
+    elif dy > dx and dy > 0:
+        speed_corrector_x = dx/ dy
+    
+    return (speed_corrector_x, speed_corrector_y)

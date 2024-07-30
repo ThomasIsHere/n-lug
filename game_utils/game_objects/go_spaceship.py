@@ -5,7 +5,7 @@ from typing import List
 
 from .go import GameObjet
 
-from game_utils.game_constants import (
+'''from game_utils.game_constants import (
       SCREEN_HEIGHT,
       SCREEN_WIDTH,
       SPACESHIP_WIDTH,
@@ -13,7 +13,7 @@ from game_utils.game_constants import (
       SPACESHIP_SPEED,
       SPACESHIP_MAX_FUEL_100,
       SPACESHIP_START_LIVES
-      )
+      )'''
 
 
 class Spaceship(GameObjet):
@@ -24,7 +24,7 @@ class Spaceship(GameObjet):
         self.lives = lives
         self.timer_immortal = timer_immortal
     
-    def init_spaceship_canvas(self, widget):
+    '''def init_spaceship_canvas(self, widget):
         with widget.canvas:
             widget.spaceship_canvas_color = Color(1, 1, 1) # white
             self.body = Ellipse(
@@ -35,4 +35,4 @@ class Spaceship(GameObjet):
             self.speed = SPACESHIP_SPEED
             self.fuel = SPACESHIP_MAX_FUEL_100
             self.lives = SPACESHIP_START_LIVES
-            self.timer_immortal = 0
+            self.timer_immortal = 0'''
