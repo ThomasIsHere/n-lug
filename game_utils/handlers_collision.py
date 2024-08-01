@@ -51,6 +51,7 @@ def __collision_handler_asteroid_with_spaceship(a: Asteroid, screen: Screen):
       s = screen.spaceship
       if a.projectile and a.collied_with(s) and s.timer_immortal <= 0:
             __spaceship_lives_handler(screen)
+            screen.canvas.remove(a.body)
             screen.asteroids.remove(a)
      
 
