@@ -4,17 +4,15 @@ from typing import List
 
 from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
+from .game_objects.go_asteroid import Asteroid
 from .utils_methods import do_not_touch_spaceship, speed_corrector, distance_2_points
 
 from .game_constants import (
-      #SPACESHIP_SPEED,
       SPACESHIP_MAX_FUEL_100,
       SPACESHIP_FUEL_DECREASE,
       SPACESHIP_FUEL_INCREASE,
-      #SPACESHIP_START_LIVES,
-      #SCREEN_HEIGHT,
-      #SCREEN_WIDTH,
-      FPS
+      FPS,
+      ASTEROID_NUMBER_WIDTH_PROJECTILE
       )
 
 
@@ -67,39 +65,13 @@ def spaceship_moves_to_handler(screen: Screen, go_x: int, go_y: int, speed_corre
 
 
 def asteroid_moves_handler(screen: Screen, dt: int):
-    print(screen.asteroid.projectile)
-    ax, ay = screen.asteroid.body.pos
-    a_speed = screen.asteroid.speed
+    a =screen.asteroid
+    s = screen.spaceship
+    target_x, target_y = s.body.pos
 
-    #if not screen.asteroid.projectile:
-    target_x, target_y = screen.spaceship.body.pos
-    speed_corrector_x, speed_corrector_y = speed_corrector(ax, ay, target_x, target_y)
-    __projectile_handler(screen, ax, target_x, ay, target_y)
-    '''else:
-        target_x, target_y = screen.spaceship.body.pos
-        speed_corrector_x, speed_corrector_y = speed_corrector(ax, ay, target_x, target_y)'''
+    a.transform_to_projectile(s)
 
-    x_speed = a_speed * speed_corrector_x * dt * FPS
-    y_speed = a_speed * speed_corrector_y * dt * FPS
-
-    if ax < target_x:
-        ax += x_speed
-    elif ax > target_x:
-        ax -= x_speed
+    if a.projectile:
+        a.projectile_straight_move()
     else:
-        ax = target_x
-    
-    if ay < target_y:
-        ay += y_speed
-    elif ay > target_y:
-        ay -= y_speed
-    else:
-        ay = target_y
-    
-    screen.asteroid.body.pos = ax, ay
-
-
-def __projectile_handler(screen: Screen, x1, x2, y1, y2):
-    w, h = screen.asteroid.body.size
-    if distance_2_points(x1, y1, x2, y2) <=  2 * w:
-        screen.asteroid.projectile = True
+        a.moves_to_target(target_x, target_y, dt)

@@ -6,9 +6,10 @@ from math import sqrt, pow
 
 from game_utils.game_constants import (
       SCREEN_HEIGHT,
-      SCREEN_WIDTH
+      SCREEN_WIDTH,
+      FPS
       )
-from game_utils.utils_methods import distance_2_points, point_in_range
+from game_utils.utils_methods import distance_2_points, point_in_range, speed_corrector
 
 
 class GameObjet:
@@ -16,18 +17,21 @@ class GameObjet:
             self.body = body
             self.listOverlap = listOverlap
 
+
       def generate_random_pos(self)  -> tuple[int, int]:
             w, h = self.body.size
             x = randint(0, SCREEN_WIDTH - int(w))
             y = randint(0, SCREEN_HEIGHT - int(h))
             return (x, y)
-    
+
+
       def move(self, speed_x, speed_y):
             x, y = self.body.pos
             x += speed_x
             y += speed_y
             self.body.pos = (x, y)
-    
+
+
       def collied_with(self, other_go: 'GameObjet') -> bool:
             x1, y1 = self.body.pos
             w1, h1 = self.body.size
@@ -98,4 +102,30 @@ class GameObjet:
             w, h = self.body.size
             x_center = x + w /2
             y_center = y + h /2
-            return (x_center, y_center)  
+            return (x_center, y_center)
+      
+
+      def moves_to_target(self, target_x: float, target_y: float, dt: int):
+            go_x, go_y = self.body.pos
+            go_speed = self.speed
+
+            speed_corrector_x, speed_corrector_y = speed_corrector(go_x, go_y, target_x, target_y)
+            
+            x_speed = go_speed * speed_corrector_x * dt * FPS
+            y_speed = go_speed * speed_corrector_y * dt * FPS
+
+            if go_x < target_x:
+                  go_x += x_speed
+            elif go_x > target_x:
+                  go_x -= x_speed
+            else:
+                  go_x = target_x
+            
+            if go_y < target_y:
+                  go_y += y_speed
+            elif go_y > target_y:
+                  go_y -= y_speed
+            else:
+                  go_y = target_y
+            
+            self.body.pos = go_x, go_y

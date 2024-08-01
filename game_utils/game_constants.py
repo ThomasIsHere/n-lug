@@ -17,6 +17,9 @@ ASTEROID_WIDTH = dp(30)
 ASTEROID_HEIGHT = dp(30)
 ASTEROID_SPEED = dp(1.5)
 
+# Number of WIDTH where Asteroid is not a projectile
+ASTEROID_NUMBER_WIDTH_PROJECTILE = 2
+
 ENEMY_MAX_SPEED = 1
 
 FPS = 60

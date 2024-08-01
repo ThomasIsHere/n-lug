@@ -1,17 +1,15 @@
-from kivy.graphics.vertex_instructions import Ellipse, Line
-from kivy.graphics.context_instructions import Color
+from kivy.graphics.vertex_instructions import Ellipse
 
 #from random import randint
 from typing import List
 
-'''from game_utils.game_constants import (
-      SCREEN_HEIGHT,
-      SCREEN_WIDTH,
-      ASTEROID_WIDTH,
-      ASTEROID_HEIGHT
-      )'''
-
 from .go import GameObjet
+from .go_spaceship import Spaceship
+
+from game_utils.utils_methods import speed_corrector, distance_2_points
+
+from game_utils.game_constants import FPS, ASTEROID_NUMBER_WIDTH_PROJECTILE
+
 
 class Asteroid(GameObjet):
     def __init__(self, body: Ellipse, listOverlap: List['GameObjet'], gravitational_field: Ellipse, speed: int, projectile: bool):
@@ -20,12 +18,41 @@ class Asteroid(GameObjet):
         self.speed = speed
         self.projectile = projectile
 
-    '''def init_asteroid_canvas(self, widget):
-        start_x = randint(0, SCREEN_WIDTH - int(ASTEROID_WIDTH))
-        start_y = randint(0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT))
-        with widget.canvas:
-            Color(.88, .57, .39) # Brown
-            self.body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))    
-            Color(1, 1, 1)
-            x, y = self.get_body_center()
-            self.gravitational_field = Line(circle=(x, y, 100), width=.3)'''
+
+    def transform_to_projectile(self, s: Spaceship):
+        w, h = self.body.size
+        x1, y1 = self.body.pos
+        x2, y2 = s.body.pos
+        if distance_2_points(x1, y1, x2, y2) <=  w * ASTEROID_NUMBER_WIDTH_PROJECTILE:
+            self.projectile = True
+
+    
+    '''def moves_toward_spaceship(self, s: Spaceship, dt: int):
+        ax, ay = self.body.pos
+        a_speed = self.speed
+
+        target_x, target_y = s.body.pos
+        speed_corrector_x, speed_corrector_y = speed_corrector(ax, ay, target_x, target_y)
+        
+        x_speed = a_speed * speed_corrector_x * dt * FPS
+        y_speed = a_speed * speed_corrector_y * dt * FPS
+
+        if ax < target_x:
+            ax += x_speed
+        elif ax > target_x:
+            ax -= x_speed
+        else:
+            ax = target_x
+        
+        if ay < target_y:
+            ay += y_speed
+        elif ay > target_y:
+            ay -= y_speed
+        else:
+            ay = target_y
+        
+        self.body.pos = ax, ay'''
+
+
+    def projectile_straight_move(self):
+        pass
