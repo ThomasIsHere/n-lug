@@ -1,6 +1,5 @@
 from kivy.graphics.vertex_instructions import Ellipse
 
-#from random import randint
 from typing import List
 
 from .go import GameObjet
@@ -8,7 +7,7 @@ from .go_spaceship import Spaceship
 
 from game_utils.utils_methods import a_b_function, distance_2_points
 
-from game_utils.game_constants import ASTEROID_NUMBER_WIDTH_PROJECTILE, SCREEN_WIDTH
+from game_utils.game_constants import ASTEROID_NUMBER_WIDTH_PROJECTILE, SCREEN_WIDTH, ASTEROID_SPEED_PROJECTILE
 
 
 class Asteroid(GameObjet):
@@ -34,7 +33,8 @@ class Asteroid(GameObjet):
         x2, y2 = s.body.pos
         if distance_2_points(x1, y1, x2, y2) <=  w * ASTEROID_NUMBER_WIDTH_PROJECTILE:
             self.projectile = True
-
+            self.speed = ASTEROID_SPEED_PROJECTILE
+            
 
     # to be call before transform_to_projectile
     def projectile_straight_target(self, s: Spaceship):
