@@ -51,3 +51,9 @@ def speed_corrector(x_pos, y_pos, x_target, y_target) -> tuple[int, int]:
         speed_corrector_x = dx/ dy
     
     return (speed_corrector_x, speed_corrector_y)
+
+
+def a_b_function(x1, y1, x2, y2) -> tuple[float, float]:
+    a = (y2 - y1) / (x2 - x1)
+    b = y1 - a * x1
+    return a, b

@@ -90,9 +90,7 @@ def init_asteroid_canvas(screen: Screen) :
                   [],
                   None,
                   ASTEROID_SPEED,
-                  False
+                  False,
+                  (None, None)
             )
             return asteroid
-            #Color(1, 1, 1)
-            #x, y = self.get_body_center()
-            #self.gravitational_field = Line(circle=(x, y, 100), width=.3)

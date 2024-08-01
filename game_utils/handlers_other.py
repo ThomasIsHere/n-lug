@@ -65,13 +65,13 @@ def spaceship_moves_to_handler(screen: Screen, go_x: int, go_y: int, speed_corre
 
 
 def asteroid_moves_handler(screen: Screen, dt: int):
-    a =screen.asteroid
+    a = screen.asteroid
     s = screen.spaceship
-    target_x, target_y = s.body.pos
 
+    a.projectile_straight_target(s)
     a.transform_to_projectile(s)
-
     if a.projectile:
-        a.projectile_straight_move()
+        target_x, target_y = a.projectile_target
     else:
-        a.moves_to_target(target_x, target_y, dt)
+        target_x, target_y = s.body.pos
+    a.moves_to_target(target_x, target_y, dt)
