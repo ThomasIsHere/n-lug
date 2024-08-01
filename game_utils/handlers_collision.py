@@ -4,6 +4,7 @@ from typing import List
 
 from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
+from .game_objects.go_asteroid import Asteroid
 
 from .game_constants import FPS
 
@@ -20,9 +21,7 @@ def __collision_handler_spaceship_enemy(screen: Screen, spaceship: Spaceship, en
         if spaceship.overlap(enemy) and enemy not in spaceship.listOverlap:
             spaceship.listOverlap.append(enemy)
         if spaceship.timer_immortal <= 0:
-            spaceship.lives -=1
-            screen.lives_remaining = str(spaceship.lives)
-            screen.spaceship.timer_immortal = 4 * FPS # 4 * FPS fps
+            __spaceship_lives_handler(screen)
 
 
 def collision_handler_spaceship_enemies(screen: Screen, spaceship: Spaceship, lenemies: List[Enemy]):
@@ -41,3 +40,21 @@ def collision_handler_between_enemies(screen: Screen, lenemies: List[Enemy]):
                                     e1.enemy_change_direction()
                               if e1.overlap(e2) and e2 not in e1.listOverlap:
                                     e1.listOverlap.append(e2)
+
+
+def collision_handler_asteroids(screen: Screen):
+      for a in screen.asteroids:
+            __collision_handler_asteroid_with_spaceship(a, screen)
+     
+
+def __collision_handler_asteroid_with_spaceship(a: Asteroid, screen: Screen):
+      s = screen.spaceship
+      if a.projectile and a.collied_with(s) and s.timer_immortal <= 0:
+            __spaceship_lives_handler(screen)
+            screen.asteroids.remove(a)
+     
+
+def __spaceship_lives_handler(screen: Screen):
+      screen.spaceship.lives -=1
+      screen.lives_remaining = str(screen.spaceship.lives)
+      screen.spaceship.timer_immortal = 4 * FPS # 4 * FPS fps

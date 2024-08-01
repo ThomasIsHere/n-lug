@@ -15,14 +15,15 @@ from game_utils.go_init_canvas import (
     )
 from game_utils.handlers_collision import (
     collision_handler_spaceship_enemies,
-    collision_handler_between_enemies
+    collision_handler_between_enemies,
+    collision_handler_asteroids
     )
 from game_utils.handlers_other import (
     immortal_color_handler,
     immortal_timer_handler,
     enemies_random_move_handler,
     spaceship_moves_to_handler,
-    asteroids_moves_handler
+    asteroids_moves_handler,
     )
 from game_utils.game_constants import (
       SPACESHIP_SPEED,
@@ -65,7 +66,7 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.enemies = init_enemies(self, 10)
+        self.enemies = init_enemies(self, 3)
         self.dict_destination = {
                                 "go_to_x": SCREEN_WIDTH / 2, 
                                 "go_to_y": SCREEN_HEIGHT / 2, 
@@ -85,6 +86,7 @@ class GameWidget(Widget):
 
 
     def update(self, dt):
+        # Moves
         spaceship_moves_to_handler(
             self,
             self.dict_destination["go_to_x"],
@@ -94,9 +96,13 @@ class GameWidget(Widget):
             self.dict_destination["is_moving"],
             dt
             )
-        collision_handler_spaceship_enemies(self, self.spaceship, self.enemies)
-        collision_handler_between_enemies(self, self.enemies)
-        immortal_color_handler(self, self.spaceship)
-        immortal_timer_handler(self)
         enemies_random_move_handler(self, self.enemies)
         asteroids_moves_handler(self, dt)
+        # Collisions
+        collision_handler_spaceship_enemies(self, self.spaceship, self.enemies)
+        collision_handler_between_enemies(self, self.enemies)
+        collision_handler_asteroids(self)
+        # Others
+        immortal_color_handler(self, self.spaceship)
+        immortal_timer_handler(self)
+        print(self.canvas)
