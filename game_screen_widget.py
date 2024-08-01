@@ -105,4 +105,3 @@ class GameWidget(Widget):
         # Others
         immortal_color_handler(self, self.spaceship)
         immortal_timer_handler(self)
-        print(self.canvas)

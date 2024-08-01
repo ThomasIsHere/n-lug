@@ -6,7 +6,7 @@ from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
 from .game_objects.go_asteroid import Asteroid
 
-from .game_constants import FPS
+from .game_constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
 
 from .utils_methods import spaceship_stops
 
@@ -45,6 +45,8 @@ def collision_handler_between_enemies(screen: Screen, lenemies: List[Enemy]):
 def collision_handler_asteroids(screen: Screen):
       for a in screen.asteroids:
             __collision_handler_asteroid_with_spaceship(a, screen)
+            __collision_handler_asteroid_with_enemies(a, screen)
+            __collision_handler_asteroid_with_screen_borders(a, screen)
      
 
 def __collision_handler_asteroid_with_spaceship(a: Asteroid, screen: Screen):
@@ -59,3 +61,26 @@ def __spaceship_lives_handler(screen: Screen):
       screen.spaceship.lives -=1
       screen.lives_remaining = str(screen.spaceship.lives)
       screen.spaceship.timer_immortal = 4 * FPS # 4 * FPS fps
+
+
+def __collision_handler_asteroid_with_enemies(a: Asteroid, screen: Screen):
+      list_e = screen.enemies
+      for e in list_e:
+            if a.projectile and a.collied_with(e):
+                  screen.canvas.remove(a.body)
+                  screen.asteroids.remove(a)
+                  screen.canvas.remove(e.body)
+                  screen.enemies.remove(e)
+
+
+def __collision_handler_asteroid_with_screen_borders(a: Asteroid, screen: Screen):
+      x,y = a.body.pos
+      w, h = a.body.size
+      if (
+            x <= 0 
+            or x >= SCREEN_WIDTH - w 
+            or y <= 0 
+            or y >= SCREEN_HEIGHT - h
+            ):
+            screen.canvas.remove(a.body)
+            screen.asteroids.remove(a)
