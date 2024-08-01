@@ -79,7 +79,15 @@ def init_enemies(screen: Screen, num: int) -> List[Enemy]:
       return list_enemies
 
 
-def init_asteroid_canvas(screen: Screen) :
+def init_asteroids(screen: Screen, num: int) -> List[Asteroid]:
+      list_asteroids = []
+      while(num > 0):
+            list_asteroids.append(__init_asteroid(screen))
+            num-=1
+      return list_asteroids
+
+
+def __init_asteroid(screen: Screen) :
       start_x = choice([0, SCREEN_WIDTH - int(ASTEROID_WIDTH)])
       start_y = choice([0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT)])
       with screen.canvas:

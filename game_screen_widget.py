@@ -11,7 +11,7 @@ from game_utils.game_objects.go_spaceship import Spaceship
 from game_utils.go_init_canvas import (
     init_spaceship,
     init_enemies,
-    init_asteroid_canvas
+    init_asteroids
     )
 from game_utils.handlers_collision import (
     collision_handler_spaceship_enemies,
@@ -22,7 +22,7 @@ from game_utils.handlers_other import (
     immortal_timer_handler,
     enemies_random_move_handler,
     spaceship_moves_to_handler,
-    asteroid_moves_handler
+    asteroids_moves_handler
     )
 from game_utils.game_constants import (
       SPACESHIP_SPEED,
@@ -32,7 +32,6 @@ from game_utils.game_constants import (
       SCREEN_WIDTH,
       FPS
       )
-
 
 
 
@@ -48,7 +47,7 @@ class GameWidget(Widget):
     dict_destination = None
     spaceship = None
     enemies = None
-    asteroid = None
+    asteroids = None
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
     spaceship_canvas_color = None
@@ -56,7 +55,7 @@ class GameWidget(Widget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.asteroid = init_asteroid_canvas(self)
+        self.asteroids = init_asteroids(self, 2)
         self.spaceship = init_spaceship(
                 self,
                 SPACESHIP_SPEED,
@@ -100,4 +99,4 @@ class GameWidget(Widget):
         immortal_color_handler(self, self.spaceship)
         immortal_timer_handler(self)
         enemies_random_move_handler(self, self.enemies)
-        asteroid_moves_handler(self, dt)
+        asteroids_moves_handler(self, dt)

@@ -11,8 +11,7 @@ from .game_constants import (
       SPACESHIP_MAX_FUEL_100,
       SPACESHIP_FUEL_DECREASE,
       SPACESHIP_FUEL_INCREASE,
-      FPS,
-      ASTEROID_NUMBER_WIDTH_PROJECTILE
+      FPS
       )
 
 
@@ -64,14 +63,15 @@ def spaceship_moves_to_handler(screen: Screen, go_x: int, go_y: int, speed_corre
         screen.fuel_value = screen.spaceship.fuel
 
 
-def asteroid_moves_handler(screen: Screen, dt: int):
-    a = screen.asteroid
+def asteroids_moves_handler(screen: Screen, dt: int):
+    list_a = screen.asteroids
     s = screen.spaceship
 
-    a.projectile_straight_target(s)
-    a.transform_to_projectile(s)
-    if a.projectile:
-        target_x, target_y = a.projectile_target
-    else:
-        target_x, target_y = s.body.pos
-    a.moves_to_target(target_x, target_y, dt)
+    for a in list_a:
+        a.projectile_straight_target(s)
+        a.transform_to_projectile(s)
+        if a.projectile:
+            target_x, target_y = a.projectile_target
+        else:
+            target_x, target_y = s.body.pos
+        a.moves_to_target(target_x, target_y, dt)
