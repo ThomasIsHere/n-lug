@@ -66,7 +66,7 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.enemies = init_enemies(self, 3)
+        self.enemies = init_enemies(self, 10)
         self.dict_destination = {
                                 "go_to_x": SCREEN_WIDTH / 2, 
                                 "go_to_y": SCREEN_HEIGHT / 2, 
@@ -99,8 +99,8 @@ class GameWidget(Widget):
         enemies_random_move_handler(self, self.enemies)
         asteroids_moves_handler(self, dt)
         # Collisions
-        collision_handler_spaceship_enemies(self, self.spaceship, self.enemies)
-        collision_handler_between_enemies(self, self.enemies)
+        collision_handler_spaceship_enemies(self)
+        collision_handler_between_enemies(self)
         collision_handler_asteroids(self)
         # Others
         immortal_color_handler(self, self.spaceship)

@@ -11,6 +11,13 @@ from .game_constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
 from .utils_methods import spaceship_stops
 
 
+def collision_handler_spaceship_enemies(screen: Screen):
+      lenemies = screen.enemies
+      s = screen.spaceship
+      for e in lenemies:
+            __collision_handler_spaceship_enemy(screen, s, e)
+
+
 def __collision_handler_spaceship_enemy(screen: Screen, spaceship: Spaceship, enemy: Enemy):
     if not spaceship.overlap(enemy) and enemy in spaceship.listOverlap:
         spaceship.listOverlap.remove(enemy)
@@ -24,12 +31,8 @@ def __collision_handler_spaceship_enemy(screen: Screen, spaceship: Spaceship, en
             __spaceship_lives_handler(screen)
 
 
-def collision_handler_spaceship_enemies(screen: Screen, spaceship: Spaceship, lenemies: List[Enemy]):
-      for e in lenemies:
-            __collision_handler_spaceship_enemy(screen, spaceship, e)
-
-
-def collision_handler_between_enemies(screen: Screen, lenemies: List[Enemy]):
+def collision_handler_between_enemies(screen: Screen):
+      lenemies = screen.enemies
       for e1 in lenemies:
             for e2 in lenemies:
                   if e1 is not e2:
