@@ -20,7 +20,8 @@ from game_utils.handlers_collision import (
     )
 from game_utils.handlers_other import (
     immortal_color_handler,
-    immortal_timer_handler
+    immortal_timer_handler,
+    num_asteroid_handler
     )
 from game_utils.handlers_moves import (
     enemies_random_move_handler,
@@ -33,7 +34,10 @@ from game_utils.game_constants import (
       SPACESHIP_START_LIVES,
       SCREEN_HEIGHT,
       SCREEN_WIDTH,
-      FPS
+      FPS,
+      START_ENEMIES,
+      START_ASTEROID,
+      ASTEROID_WAITING_COUNT
       )
 
 
@@ -54,11 +58,12 @@ class GameWidget(Widget):
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
     spaceship_canvas_color = None
+    wainting_counter = 0
 
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.asteroids = init_asteroids(self, 2)
+        self.asteroids = init_asteroids(self, START_ASTEROID)
         self.spaceship = init_spaceship(
                 self,
                 SPACESHIP_SPEED,
@@ -68,7 +73,7 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.enemies = init_enemies(self, 10)
+        self.enemies = init_enemies(self, START_ENEMIES)
         self.dict_destination = {
                                 "go_to_x": SCREEN_WIDTH / 2, 
                                 "go_to_y": SCREEN_HEIGHT / 2, 
@@ -77,6 +82,7 @@ class GameWidget(Widget):
                                 "is_moving": False
                                 }
         self.lives_remaining = str(self.spaceship.lives)
+        self.wainting_counter = ASTEROID_WAITING_COUNT
         Clock.schedule_interval(self.update, 1.0 / FPS)
 
 
@@ -99,3 +105,4 @@ class GameWidget(Widget):
         # Others
         immortal_color_handler(self)
         immortal_timer_handler(self)
+        num_asteroid_handler(self)
