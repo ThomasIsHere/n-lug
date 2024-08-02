@@ -97,5 +97,5 @@ class GameWidget(Widget):
         collision_handler_between_enemies(self)
         collision_handler_asteroids(self)
         # Others
-        immortal_color_handler(self, self.spaceship)
+        immortal_color_handler(self)
         immortal_timer_handler(self)
