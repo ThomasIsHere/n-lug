@@ -20,7 +20,9 @@ from game_utils.handlers_collision import (
     )
 from game_utils.handlers_other import (
     immortal_color_handler,
-    immortal_timer_handler,
+    immortal_timer_handler
+    )
+from game_utils.handlers_moves import (
     enemies_random_move_handler,
     spaceship_moves_to_handler,
     asteroids_moves_handler,
@@ -87,16 +89,8 @@ class GameWidget(Widget):
 
     def update(self, dt):
         # Moves
-        spaceship_moves_to_handler(
-            self,
-            self.dict_destination["go_to_x"],
-            self.dict_destination["go_to_y"],
-            self.dict_destination["speed_corrector_x"],
-            self.dict_destination["speed_corrector_y"],
-            self.dict_destination["is_moving"],
-            dt
-            )
-        enemies_random_move_handler(self, self.enemies)
+        spaceship_moves_to_handler(self, dt)
+        enemies_random_move_handler(self)
         asteroids_moves_handler(self, dt)
         # Collisions
         collision_handler_spaceship_enemies(self)
