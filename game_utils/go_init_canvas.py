@@ -87,9 +87,8 @@ def init_asteroids(screen: Screen, num: int) -> List[Asteroid]:
       return list_asteroids
 
 
-def __init_asteroid(screen: Screen) :
-      start_x = choice([0, SCREEN_WIDTH - int(ASTEROID_WIDTH)])
-      start_y = choice([0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT)])
+def __init_asteroid(screen: Screen):
+      start_x, start_y = __random_asteroid_position(screen)
       with screen.canvas:
             Color(.88, .57, .39) # Brown
             body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))
@@ -102,3 +101,14 @@ def __init_asteroid(screen: Screen) :
                   (None, None)
             )
             return asteroid
+
+
+def __random_asteroid_position(screen: Screen) -> tuple[int, int]:
+      x = randint(0, SCREEN_WIDTH - int(ASTEROID_WIDTH))
+      y = randint(0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT))
+      spaceship_x, spaceship_y = screen.spaceship.body.pos
+      d = distance_2_points(x, x, spaceship_x, spaceship_y)
+      # enemy pops at least 4 times the distance of spaceship width
+      if d > 20 * SPACESHIP_WIDTH:
+            return (x, y)
+      return __random_asteroid_position(screen)
