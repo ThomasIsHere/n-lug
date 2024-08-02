@@ -25,6 +25,7 @@ ENEMY_MAX_SPEED = 1
 
 FPS = 60
 ASTEROID_WAITING_COUNT = FPS * 3
+ENEMY_WAITING_COUNT = FPS * 3
 
 # Set those values in auto
 # when screen will adapt to device size

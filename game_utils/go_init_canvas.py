@@ -42,7 +42,7 @@ def init_spaceship(
             return spaceship
 
 
-def __init_enemy(screen: Screen) -> Enemy:
+def init_enemy(screen: Screen) -> Enemy:
       with screen.canvas:
             Color(1, 0, 0) # red
             body = Ellipse(
@@ -74,7 +74,7 @@ def __enmy_random_init_pos_away_spaceship(screen: Screen) -> tuple[int, int]:
 def init_enemies(screen: Screen, num: int) -> List[Enemy]:
       list_enemies = []
       while(num > 0):
-            list_enemies.append(__init_enemy(screen))
+            list_enemies.append(init_enemy(screen))
             num-=1
       return list_enemies
 
