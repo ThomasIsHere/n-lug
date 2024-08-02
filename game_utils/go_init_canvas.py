@@ -42,7 +42,7 @@ def init_spaceship(
             return spaceship
 
 
-def init_enemy(screen: Screen) -> Enemy:
+def __init_enemy(screen: Screen) -> Enemy:
       with screen.canvas:
             Color(1, 0, 0) # red
             body = Ellipse(
@@ -74,7 +74,7 @@ def __enmy_random_init_pos_away_spaceship(screen: Screen) -> tuple[int, int]:
 def init_enemies(screen: Screen, num: int) -> List[Enemy]:
       list_enemies = []
       while(num > 0):
-            list_enemies.append(init_enemy(screen))
+            list_enemies.append(__init_enemy(screen))
             num-=1
       return list_enemies
 
@@ -82,12 +82,12 @@ def init_enemies(screen: Screen, num: int) -> List[Enemy]:
 def init_asteroids(screen: Screen, num: int) -> List[Asteroid]:
       list_asteroids = []
       while(num > 0):
-            list_asteroids.append(init_asteroid(screen))
+            list_asteroids.append(__init_asteroid(screen))
             num-=1
       return list_asteroids
 
 
-def init_asteroid(screen: Screen) :
+def __init_asteroid(screen: Screen) :
       start_x = choice([0, SCREEN_WIDTH - int(ASTEROID_WIDTH)])
       start_y = choice([0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT)])
       with screen.canvas:

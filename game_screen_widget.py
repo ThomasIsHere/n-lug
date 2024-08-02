@@ -54,19 +54,24 @@ class GameWidget(Widget):
     from game_utils.game_player_actions import on_touch_down, on_touch_up, on_touch_move
 
     dict_destination = None
+
     spaceship = None
     enemies = None
     asteroids = None
+    spaceship_canvas_color = None
+    
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
-    spaceship_canvas_color = None
+    game_level_label = StringProperty("")
+    game_level = None
+    
     wainting_asteroid_counter = 0
     wainting_enemy_counter = 0
 
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.asteroids = init_asteroids(self, START_ASTEROID)
+        self.game_level = 1
         self.spaceship = init_spaceship(
                 self,
                 SPACESHIP_SPEED,
@@ -76,7 +81,8 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.enemies = init_enemies(self, START_ENEMIES)
+        self.asteroids = init_asteroids(self, self.game_level * 2)
+        self.enemies = init_enemies(self, self.game_level * 3)
         self.dict_destination = {
                                 "go_to_x": SCREEN_WIDTH / 2, 
                                 "go_to_y": SCREEN_HEIGHT / 2, 
@@ -85,6 +91,7 @@ class GameWidget(Widget):
                                 "is_moving": False
                                 }
         self.lives_remaining = str(self.spaceship.lives)
+        self.game_level_label = str(self.game_level)
         self.wainting_asteroid_counter = ASTEROID_WAITING_COUNT
         self.wainting_enemy_counter = ENEMY_WAITING_COUNT
         Clock.schedule_interval(self.update, 1.0 / FPS)
