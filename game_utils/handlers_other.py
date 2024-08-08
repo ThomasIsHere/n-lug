@@ -1,8 +1,9 @@
 from kivy.uix.screenmanager import Screen
-#from kivy.clock import Clock
 
 from .go_init_canvas import init_asteroids, init_enemies
 from .game_constants import ASTEROID_WAITING_COUNT, ENEMY_WAITING_COUNT
+from game_utils.utils_methods import distance_2_points
+from .game_objects.go_asteroid import AsteroidState
 
 def immortal_color_handler(screen: Screen):
     s = screen.spaceship
@@ -22,7 +23,7 @@ def num_asteroids_handler(screen: Screen):
         screen.wainting_asteroid_counter -= 1
         if screen.wainting_asteroid_counter <= 0:
             num = screen.game_level * 2
-            screen.asteroids = init_asteroids(screen, num)
+            screen.asteroids, screen.asteroids_canvas_color = init_asteroids(screen, num)
             screen.wainting_asteroid_counter = ASTEROID_WAITING_COUNT
 
 
@@ -39,3 +40,18 @@ def num_enemies_handler(screen: Screen):
 def __game_level_icrement_handler(screen: Screen):
       screen.game_level += 1
       screen.game_level_label = str(screen.game_level)
+
+
+def asteroids_state_handler(screen: Screen):
+    x2, y2 = screen.spaceship.body.pos
+    w, h = screen.spaceship.body.size
+    for a in screen.asteroids:
+        x1, y1 = a.body.pos
+        if (a.state == AsteroidState.RANDOM 
+            and distance_2_points(x1, y1, x2, y2) <=  w * 6): # replace 6 with constant
+            a.state = AsteroidState.FOLLOW
+            screen.asteroids_canvas_color[a].rgba = (1, .8, .4, 1)
+        elif (a.state == AsteroidState.FOLLOW
+              and distance_2_points(x1, y1, x2, y2) <= w * 3): # replace 3 with constant
+            a.state = AsteroidState.PROJECTILE
+            screen.asteroids_canvas_color[a].rgba = (1, 1, 0, 1)

@@ -2,12 +2,6 @@ from kivy.properties import Clock, NumericProperty, StringProperty
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
 
-from typing import List
-
-from game_utils.game_objects.go_asteroid import Asteroid
-from game_utils.game_objects.go_enemy import Enemy
-from game_utils.game_objects.go_spaceship import Spaceship
-
 from game_utils.go_init_canvas import (
     init_spaceship,
     init_enemies,
@@ -22,7 +16,8 @@ from game_utils.handlers_other import (
     immortal_color_handler,
     immortal_timer_handler,
     num_asteroids_handler,
-    num_enemies_handler
+    num_enemies_handler,
+    asteroids_state_handler
     )
 from game_utils.handlers_moves import (
     enemies_random_move_handler,
@@ -36,8 +31,6 @@ from game_utils.game_constants import (
       SCREEN_HEIGHT,
       SCREEN_WIDTH,
       FPS,
-      START_ENEMIES,
-      START_ASTEROID,
       ASTEROID_WAITING_COUNT,
       ENEMY_WAITING_COUNT
       )
@@ -58,7 +51,10 @@ class GameWidget(Widget):
     spaceship = None
     enemies = None
     asteroids = None
-    spaceship_canvas_color = None
+    asteroids_canvas_color = None
+    
+    # not needed defined and attached to GameWidget in init package
+    # spaceship_canvas_color = None
     
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
@@ -81,7 +77,7 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.asteroids = init_asteroids(self, self.game_level * 2)
+        self.asteroids, self.asteroids_canvas_color = init_asteroids(self, self.game_level * 2)
         self.enemies = init_enemies(self, self.game_level * 3)
         self.dict_destination = {
                                 "go_to_x": SCREEN_WIDTH / 2, 
@@ -118,3 +114,4 @@ class GameWidget(Widget):
         immortal_timer_handler(self)
         num_asteroids_handler(self)
         num_enemies_handler(self)
+        asteroids_state_handler(self)

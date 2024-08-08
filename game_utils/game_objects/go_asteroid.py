@@ -1,13 +1,26 @@
 from kivy.graphics.vertex_instructions import Ellipse
+from kivy.uix.screenmanager import Screen
 
 from typing import List
+from enum import Enum
+from random import randint
 
 from .go import GameObjet
-from .go_spaceship import Spaceship
 
-from game_utils.utils_methods import a_b_function, distance_2_points
+from game_utils.utils_methods import speed_corrector
 
-from game_utils.game_constants import ASTEROID_NUMBER_WIDTH_PROJECTILE, SCREEN_WIDTH, ASTEROID_SPEED_PROJECTILE
+from game_utils.game_constants import (
+    ASTEROID_SPEED,
+    FPS
+    )
+
+
+
+class AsteroidState(Enum):
+    RANDOM = "RANDOM"
+    FOLLOW = "FOLLOW"
+    PROJECTILE = "PROJECTILE"
+
 
 
 class Asteroid(GameObjet):
@@ -15,36 +28,70 @@ class Asteroid(GameObjet):
             self, 
             body: Ellipse, 
             listOverlap: List['GameObjet'], 
-            gravitational_field: Ellipse, 
-            speed: int, 
-            projectile: bool, 
-            projectile_target: tuple[float, float]
+            state: AsteroidState,
+            speed_x: int, 
+            speed_y: int, 
+            right: bool, 
+            up: bool
             ):
         GameObjet.__init__(self, body, listOverlap)
-        self.gravitational_field = gravitational_field
-        self.speed = speed
-        self.projectile = projectile
-        self.projectile_target = projectile_target
 
+        self.state = state
+        self.speed_x = speed_x
+        self.speed_y = speed_y
+        self.right = right
+        self.up = up
 
-    def transform_to_projectile(self, s: Spaceship):
+    def random_move(self, s: Screen):
+        x, y = self.body.pos
         w, h = self.body.size
-        x1, y1 = self.body.pos
-        x2, y2 = s.body.pos
-        if distance_2_points(x1, y1, x2, y2) <=  w * ASTEROID_NUMBER_WIDTH_PROJECTILE:
-            self.projectile = True
-            self.speed = ASTEROID_SPEED_PROJECTILE
-            
 
-    # to be call before transform_to_projectile
-    def projectile_straight_target(self, s: Spaceship):
-        if not self.projectile:
-            x1, y1 = self.body.pos
-            x2, y2 = s.body.pos
-            a, b = a_b_function(x1, y1, x2, y2)
-            if x1 < x2: # direction right
-                target_x = SCREEN_WIDTH
-            else: # direction left
-                target_x = 0
-            target_y = a * target_x + b
-            self.projectile_target = target_x, target_y
+        if x + w <= s.width and self.right:
+                x+=self.speed_x
+        elif x >= 0 and not self.right:
+                x-=self.speed_x
+
+        if x + w > s.width and self.right:
+                self.right = False
+                self.speed_x = randint(1, ASTEROID_SPEED)
+        elif x < 0 and not self.right:
+                self.right = True
+                self.speed_x = randint(1, ASTEROID_SPEED)
+        
+        if y + h <= s.height and self.up:
+                y+=self.speed_y
+        elif y >= 0 and not self.up:
+                y-=self.speed_y
+
+        if y + h > s.height and self.up:
+                self.up = False
+                self.speed_y = randint(1, ASTEROID_SPEED)
+        elif y < 0 and not self.up:
+                self.up = True
+                self.speed_y = randint(1, ASTEROID_SPEED)
+
+        self.body.pos = (x, y)
+
+    def moves_to_target(self, target_x: float, target_y: float, dt: int):
+        go_x, go_y = self.body.pos
+
+        speed_corrector_x, speed_corrector_y = speed_corrector(go_x, go_y, target_x, target_y)
+            
+        x_speed = self.speed_x * speed_corrector_x * dt * FPS
+        y_speed = self.speed_y * speed_corrector_y * dt * FPS
+
+        if go_x < target_x:
+                go_x += x_speed
+        elif go_x > target_x:
+                go_x -= x_speed
+        else:
+                go_x = target_x
+        
+        if go_y < target_y:
+                go_y += y_speed
+        elif go_y > target_y:
+                go_y -= y_speed
+        else:
+                go_y = target_y
+        
+        self.body.pos = go_x, go_y

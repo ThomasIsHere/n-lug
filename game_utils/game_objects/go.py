@@ -2,14 +2,12 @@ from kivy.graphics.vertex_instructions import Ellipse
 
 from random import randint
 from typing import List
-from math import sqrt, pow
 
 from game_utils.game_constants import (
       SCREEN_HEIGHT,
-      SCREEN_WIDTH,
-      FPS
+      SCREEN_WIDTH
       )
-from game_utils.utils_methods import distance_2_points, point_in_range, speed_corrector
+from game_utils.utils_methods import distance_2_points, point_in_range
 
 
 class GameObjet:
@@ -103,29 +101,3 @@ class GameObjet:
             x_center = x + w /2
             y_center = y + h /2
             return (x_center, y_center)
-      
-
-      def moves_to_target(self, target_x: float, target_y: float, dt: int):
-            go_x, go_y = self.body.pos
-            go_speed = self.speed
-
-            speed_corrector_x, speed_corrector_y = speed_corrector(go_x, go_y, target_x, target_y)
-            
-            x_speed = go_speed * speed_corrector_x * dt * FPS
-            y_speed = go_speed * speed_corrector_y * dt * FPS
-
-            if go_x < target_x:
-                  go_x += x_speed
-            elif go_x > target_x:
-                  go_x -= x_speed
-            else:
-                  go_x = target_x
-            
-            if go_y < target_y:
-                  go_y += y_speed
-            elif go_y > target_y:
-                  go_y -= y_speed
-            else:
-                  go_y = target_y
-            
-            self.body.pos = go_x, go_y

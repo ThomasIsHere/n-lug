@@ -1,10 +1,8 @@
 from kivy.uix.screenmanager import Screen
 
-from typing import List
-
 from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
-from .game_objects.go_asteroid import Asteroid
+from .game_objects.go_asteroid import Asteroid, AsteroidState
 
 from .game_constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
 
@@ -49,12 +47,12 @@ def collision_handler_asteroids(screen: Screen):
       for a in screen.asteroids:
             __collision_handler_asteroid_with_spaceship(a, screen)
             __collision_handler_asteroid_with_enemies(a, screen)
-            __collision_handler_asteroid_with_screen_borders(a, screen)
+            __collision_handler_asteroid_with_screen_borders(a)
      
 
 def __collision_handler_asteroid_with_spaceship(a: Asteroid, screen: Screen):
       s = screen.spaceship
-      if a.projectile and a.collied_with(s) and s.timer_immortal <= 0:
+      if a.state == AsteroidState.PROJECTILE and a.collied_with(s) and s.timer_immortal <= 0:
             __spaceship_lives_handler(screen)
             screen.canvas.remove(a.body)
             screen.asteroids.remove(a)
@@ -69,14 +67,14 @@ def __spaceship_lives_handler(screen: Screen):
 def __collision_handler_asteroid_with_enemies(a: Asteroid, screen: Screen):
       list_e = screen.enemies
       for e in list_e:
-            if a.projectile and a.collied_with(e):
+            if a.state == AsteroidState.PROJECTILE and a.collied_with(e):
                   screen.canvas.remove(a.body)
                   screen.asteroids.remove(a)
                   screen.canvas.remove(e.body)
                   screen.enemies.remove(e)
 
 
-def __collision_handler_asteroid_with_screen_borders(a: Asteroid, screen: Screen):
+def __collision_handler_asteroid_with_screen_borders(a: Asteroid):
       x,y = a.body.pos
       w, h = a.body.size
       if (
@@ -85,5 +83,4 @@ def __collision_handler_asteroid_with_screen_borders(a: Asteroid, screen: Screen
             or y <= 0 
             or y >= SCREEN_HEIGHT - h
             ):
-            screen.canvas.remove(a.body)
-            screen.asteroids.remove(a)
+            pass

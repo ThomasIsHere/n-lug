@@ -7,7 +7,7 @@ from typing import List
 
 from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
-from .game_objects.go_asteroid import Asteroid
+from .game_objects.go_asteroid import Asteroid, AsteroidState
 from .game_constants import (
       SPACESHIP_HEIGHT,
       SPACESHIP_WIDTH,
@@ -81,26 +81,30 @@ def init_enemies(screen: Screen, num: int) -> List[Enemy]:
 
 def init_asteroids(screen: Screen, num: int) -> List[Asteroid]:
       list_asteroids = []
+      dict_asteroids_colors = {}
       while(num > 0):
-            list_asteroids.append(__init_asteroid(screen))
+            asteroid, asteroid_canvas_color = __init_asteroid(screen)
+            list_asteroids.append(asteroid)
+            dict_asteroids_colors[asteroid] = asteroid_canvas_color
             num-=1
-      return list_asteroids
+      return list_asteroids, dict_asteroids_colors
 
 
-def __init_asteroid(screen: Screen):
+def __init_asteroid(screen: Screen) -> tuple[Asteroid, object]:
       start_x, start_y = __random_asteroid_position(screen)
       with screen.canvas:
-            Color(.88, .57, .39) # Brown
+            screen.asteroid_canvas_color = Color(1, .6, .1) 
             body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))
             asteroid = Asteroid(
                   body,
                   [],
-                  None,
-                  ASTEROID_SPEED,
-                  False,
-                  (None, None)
+                  AsteroidState.RANDOM,
+                  randint(0, ASTEROID_SPEED),
+                  randint(0, ASTEROID_SPEED),
+                  choice([True, False]),
+                  choice([True, False])
             )
-            return asteroid
+            return asteroid, screen.asteroid_canvas_color
 
 
 def __random_asteroid_position(screen: Screen) -> tuple[int, int]:
