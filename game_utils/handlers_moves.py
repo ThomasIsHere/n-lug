@@ -1,14 +1,15 @@
 from kivy.uix.screenmanager import Screen
 
 from .game_objects.go_asteroid import AsteroidState
-from .utils_methods import do_not_touch_spaceship
+from .utils_methods import do_not_touch_spaceship, a_b_function, linear_function
 
 from .game_constants import (
       SPACESHIP_MAX_FUEL_100,
       SPACESHIP_FUEL_DECREASE,
       SPACESHIP_FUEL_INCREASE,
       FPS,
-      ASTEROID_SPEED
+      ASTEROID_SPEED,
+      ASTEROID_SPEED_PROJECTILE
       )
 
 
@@ -57,7 +58,6 @@ def spaceship_moves_to_handler(screen: Screen, dt):
 
 def asteroids_moves_handler(screen: Screen, dt: int):
     list_a = screen.asteroids
-    #s = screen.spaceship
     for a in list_a:
         if a.state == AsteroidState.FOLLOW:
             xs, ys = screen.spaceship.body.pos
@@ -65,6 +65,8 @@ def asteroids_moves_handler(screen: Screen, dt: int):
             a.speed_y = ASTEROID_SPEED
             a.moves_to_target(xs, ys, dt)
         elif a.state == AsteroidState.PROJECTILE:
-            pass # to be code
+            a.speed_x = ASTEROID_SPEED_PROJECTILE
+            a.speed_y = ASTEROID_SPEED_PROJECTILE
+            a.moves_to_target(a.projectile_target_x, a.projectile_target_y, dt)
         elif a.state == AsteroidState.RANDOM:
             a.random_move(screen)

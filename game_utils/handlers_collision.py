@@ -4,7 +4,7 @@ from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
 from .game_objects.go_asteroid import Asteroid, AsteroidState
 
-from .game_constants import FPS #, SCREEN_WIDTH, SCREEN_HEIGHT
+from .game_constants import FPS, ASTEROID_SPEED
 
 from .utils_methods import spaceship_stops
 
@@ -84,4 +84,5 @@ def __collision_handler_asteroid_with_screen_borders(a: Asteroid, screen: Screen
             or y <= 0 
             or y >= hs - h
             ):
-            pass
+            a.state = AsteroidState.RANDOM
+            screen.asteroids_canvas_color[a].rgba = (1, .6, .1, 1)

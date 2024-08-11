@@ -32,15 +32,18 @@ class Asteroid(GameObjet):
             speed_x: int, 
             speed_y: int, 
             right: bool, 
-            up: bool
+            up: bool,
+            projectile_target_x: float,
+            projectile_target_y: float
             ):
         GameObjet.__init__(self, body, listOverlap)
-
         self.state = state
         self.speed_x = speed_x
         self.speed_y = speed_y
         self.right = right
         self.up = up
+        self.projectile_target_x = projectile_target_x
+        self.projectile_target_y = projectile_target_y
 
     def random_move(self, s: Screen):
         x, y = self.body.pos

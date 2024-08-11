@@ -28,8 +28,6 @@ from game_utils.game_constants import (
       SPACESHIP_SPEED,
       SPACESHIP_MAX_FUEL_100,
       SPACESHIP_START_LIVES,
-      #SCREEN_HEIGHT,
-      #SCREEN_WIDTH,
       FPS,
       ASTEROID_WAITING_COUNT,
       ENEMY_WAITING_COUNT
@@ -103,6 +101,8 @@ class GameWidget(Widget):
         return False'''
 
     def update(self, dt):
+        if(self.asteroids):
+            print(self.asteroids[0].state)
         # Moves
         spaceship_moves_to_handler(self, dt)
         enemies_random_move_handler(self)

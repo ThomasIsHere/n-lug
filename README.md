@@ -60,7 +60,8 @@ buildozer android clean
 buildozer android debug
 ```
 ### Deploy APK on Android Phone
-Manually deploying and installing apk on phone not working ...
-Check log with: adb logcat | findstr n-lug
+Manually deploying and installing apk on Android using drag and drop.
+apk fil is in ```\\wsl$```
+Check log with: ```adb logcat | findstr n-lug```
 ### Use Android Debug Bridge
 Part not working find another tutorial.

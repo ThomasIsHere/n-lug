@@ -53,7 +53,11 @@ def speed_corrector(x_pos, y_pos, x_target, y_target) -> tuple[int, int]:
     return (speed_corrector_x, speed_corrector_y)
 
 
-def a_b_function(x1, y1, x2, y2) -> tuple[float, float]:
-    a = (y2 - y1) / (x2 - x1)
+def a_b_function(x1: float, y1: float, x2: float, y2: float) -> tuple[float, float]:
+    a = (y2 - y1) / (x2 - x1)        
     b = y1 - a * x1
     return a, b
+
+
+def linear_function(a: float, b: float, x: float)-> float:
+    return a * x + b

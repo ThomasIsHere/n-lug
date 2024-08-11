@@ -2,7 +2,7 @@ from kivy.uix.screenmanager import Screen
 
 from .go_init_canvas import init_asteroids, init_enemies
 from .game_constants import ASTEROID_WAITING_COUNT, ENEMY_WAITING_COUNT
-from game_utils.utils_methods import distance_2_points
+from game_utils.utils_methods import distance_2_points, a_b_function, linear_function
 from .game_objects.go_asteroid import AsteroidState
 
 def immortal_color_handler(screen: Screen):
@@ -55,3 +55,11 @@ def asteroids_state_handler(screen: Screen):
               and distance_2_points(x1, y1, x2, y2) <= w * 3): # replace 3 with constant
             a.state = AsteroidState.PROJECTILE
             screen.asteroids_canvas_color[a].rgba = (1, 1, 0, 1)
+            la, lb = a_b_function(x2, x1, y2, y1)
+            if x1 < x2:
+                x_target = screen.width
+            else:
+                x_target = 0
+            y_target = linear_function(la, lb, x_target)
+            a.projectile_target_x = x_target
+            a.projectile_target_y = y_target

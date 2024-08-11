@@ -92,7 +92,7 @@ def init_asteroids(screen: Screen, num: int) -> List[Asteroid]:
 
 
 def __init_asteroid(screen: Screen) -> tuple[Asteroid, object]:
-      start_x, start_y = 10, 10 # __random_asteroid_position(screen)
+      start_x, start_y = __random_asteroid_position(screen)
       with screen.canvas:
             screen.asteroid_canvas_color = Color(1, .6, .1) 
             body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))
@@ -100,21 +100,23 @@ def __init_asteroid(screen: Screen) -> tuple[Asteroid, object]:
                   body,
                   [],
                   AsteroidState.RANDOM,
-                  randint(0, ASTEROID_SPEED),
-                  randint(0, ASTEROID_SPEED),
+                  randint(1, ASTEROID_SPEED),
+                  randint(1, ASTEROID_SPEED),
                   choice([True, False]),
-                  choice([True, False])
+                  choice([True, False]),
+                  None,
+                  None
             )
             return asteroid, screen.asteroid_canvas_color
 
 
 def __random_asteroid_position(screen: Screen) -> tuple[int, int]:
-      #ws, hs = screen.size
-      x = 10 #randint(0, ws - int(ASTEROID_WIDTH))
-      y = 10 #randint(0, hs - int(ASTEROID_HEIGHT))
+      ws, hs = screen.size
+      x = randint(0, ws - int(ASTEROID_WIDTH))
+      y = randint(0, hs - int(ASTEROID_HEIGHT))
       spaceship_x, spaceship_y = screen.spaceship.body.pos
       d = distance_2_points(x, x, spaceship_x, spaceship_y)
-      # enemy pops at least 4 times the distance of spaceship width
-      if d > 20 * SPACESHIP_WIDTH:
+      # enemy pops at least 7 times the distance of spaceship width
+      if d > 7 * SPACESHIP_WIDTH:
             return (x, y)
       return __random_asteroid_position(screen)
