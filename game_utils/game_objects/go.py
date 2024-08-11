@@ -1,12 +1,13 @@
 from kivy.graphics.vertex_instructions import Ellipse
+from kivy.uix.screenmanager import Screen
 
 from random import randint
 from typing import List
 
-from game_utils.game_constants import (
-      SCREEN_HEIGHT,
-      SCREEN_WIDTH
-      )
+#from game_utils.game_constants import (
+#      SCREEN_HEIGHT,
+#      SCREEN_WIDTH
+#      )
 from game_utils.utils_methods import distance_2_points, point_in_range
 
 
@@ -16,10 +17,11 @@ class GameObjet:
             self.listOverlap = listOverlap
 
 
-      def generate_random_pos(self)  -> tuple[int, int]:
+      def generate_random_pos(self, screen: Screen)  -> tuple[int, int]:
             w, h = self.body.size
-            x = randint(0, SCREEN_WIDTH - int(w))
-            y = randint(0, SCREEN_HEIGHT - int(h))
+            ws, hs = screen.size
+            x = randint(0, ws - int(w))
+            y = randint(0, hs - int(h))
             return (x, y)
 
 

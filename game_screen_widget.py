@@ -28,8 +28,8 @@ from game_utils.game_constants import (
       SPACESHIP_SPEED,
       SPACESHIP_MAX_FUEL_100,
       SPACESHIP_START_LIVES,
-      SCREEN_HEIGHT,
-      SCREEN_WIDTH,
+      #SCREEN_HEIGHT,
+      #SCREEN_WIDTH,
       FPS,
       ASTEROID_WAITING_COUNT,
       ENEMY_WAITING_COUNT
@@ -64,15 +64,19 @@ class GameWidget(Widget):
     wainting_asteroid_counter = 0
     wainting_enemy_counter = 0
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.bind(size=self.init_game)
+
+    def init_game(self, *args):
+        ws = self.width
+        hs = self.height
         self.game_level = 1
         self.spaceship = init_spaceship(
                 self,
                 SPACESHIP_SPEED,
-                SCREEN_WIDTH / 2,
-                SCREEN_HEIGHT / 2,
+                ws / 2,
+                hs / 2,
                 SPACESHIP_MAX_FUEL_100,
                 SPACESHIP_START_LIVES,
                 0
@@ -80,8 +84,8 @@ class GameWidget(Widget):
         self.asteroids, self.asteroids_canvas_color = init_asteroids(self, self.game_level * 2)
         self.enemies = init_enemies(self, self.game_level * 3)
         self.dict_destination = {
-                                "go_to_x": SCREEN_WIDTH / 2, 
-                                "go_to_y": SCREEN_HEIGHT / 2, 
+                                "go_to_x": ws / 2, 
+                                "go_to_y": hs / 2, 
                                 "speed_corrector_x": 0.0, 
                                 "speed_corrector_y": 0.0,
                                 "is_moving": False
@@ -92,13 +96,11 @@ class GameWidget(Widget):
         self.wainting_enemy_counter = ENEMY_WAITING_COUNT
         Clock.schedule_interval(self.update, 1.0 / FPS)
 
-
     #  'win', 'linux', 'android', 'macosx', 'ios' or 'unknown'
     '''def is_desktop(self):
         if platform in ('linux', 'win', 'macosx'):
             return True
         return False'''
-
 
     def update(self, dt):
         # Moves

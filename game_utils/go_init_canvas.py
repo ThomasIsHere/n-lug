@@ -11,8 +11,8 @@ from .game_objects.go_asteroid import Asteroid, AsteroidState
 from .game_constants import (
       SPACESHIP_HEIGHT,
       SPACESHIP_WIDTH,
-      SCREEN_HEIGHT,
-      SCREEN_WIDTH,
+      #SCREEN_HEIGHT,
+      #SCREEN_WIDTH,
       ENEMY_WIDTH,
       ENEMY_HEIGHT,
       ENEMY_MAX_SPEED,
@@ -61,8 +61,9 @@ def __init_enemy(screen: Screen) -> Enemy:
 
 
 def __enmy_random_init_pos_away_spaceship(screen: Screen) -> tuple[int, int]:
-      x = randint(0, SCREEN_WIDTH - int(ENEMY_WIDTH))
-      y = randint(0, SCREEN_HEIGHT - int(ENEMY_HEIGHT))
+      ws, hs = screen.size
+      x = randint(0, ws - int(ENEMY_WIDTH))
+      y = randint(0, hs - int(ENEMY_HEIGHT))
       spaceship_x, spaceship_y = screen.spaceship.body.pos
       d = distance_2_points(x, x, spaceship_x, spaceship_y)
       # enemy pops at least 4 times the distance of spaceship width
@@ -91,7 +92,7 @@ def init_asteroids(screen: Screen, num: int) -> List[Asteroid]:
 
 
 def __init_asteroid(screen: Screen) -> tuple[Asteroid, object]:
-      start_x, start_y = __random_asteroid_position(screen)
+      start_x, start_y = 10, 10 # __random_asteroid_position(screen)
       with screen.canvas:
             screen.asteroid_canvas_color = Color(1, .6, .1) 
             body = Ellipse(pos=(start_x, start_y),size=(ASTEROID_WIDTH, ASTEROID_HEIGHT))
@@ -108,8 +109,9 @@ def __init_asteroid(screen: Screen) -> tuple[Asteroid, object]:
 
 
 def __random_asteroid_position(screen: Screen) -> tuple[int, int]:
-      x = randint(0, SCREEN_WIDTH - int(ASTEROID_WIDTH))
-      y = randint(0, SCREEN_HEIGHT - int(ASTEROID_HEIGHT))
+      #ws, hs = screen.size
+      x = 10 #randint(0, ws - int(ASTEROID_WIDTH))
+      y = 10 #randint(0, hs - int(ASTEROID_HEIGHT))
       spaceship_x, spaceship_y = screen.spaceship.body.pos
       d = distance_2_points(x, x, spaceship_x, spaceship_y)
       # enemy pops at least 4 times the distance of spaceship width

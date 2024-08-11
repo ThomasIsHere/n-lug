@@ -4,7 +4,7 @@ from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
 from .game_objects.go_asteroid import Asteroid, AsteroidState
 
-from .game_constants import FPS, SCREEN_WIDTH, SCREEN_HEIGHT
+from .game_constants import FPS #, SCREEN_WIDTH, SCREEN_HEIGHT
 
 from .utils_methods import spaceship_stops
 
@@ -47,7 +47,7 @@ def collision_handler_asteroids(screen: Screen):
       for a in screen.asteroids:
             __collision_handler_asteroid_with_spaceship(a, screen)
             __collision_handler_asteroid_with_enemies(a, screen)
-            __collision_handler_asteroid_with_screen_borders(a)
+            __collision_handler_asteroid_with_screen_borders(a, screen)
      
 
 def __collision_handler_asteroid_with_spaceship(a: Asteroid, screen: Screen):
@@ -74,13 +74,14 @@ def __collision_handler_asteroid_with_enemies(a: Asteroid, screen: Screen):
                   screen.enemies.remove(e)
 
 
-def __collision_handler_asteroid_with_screen_borders(a: Asteroid):
+def __collision_handler_asteroid_with_screen_borders(a: Asteroid, screen: Screen):
       x,y = a.body.pos
       w, h = a.body.size
+      ws, hs = screen.size
       if (
             x <= 0 
-            or x >= SCREEN_WIDTH - w 
+            or x >= ws - w 
             or y <= 0 
-            or y >= SCREEN_HEIGHT - h
+            or y >= hs - h
             ):
             pass
