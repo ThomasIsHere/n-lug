@@ -101,8 +101,6 @@ class GameWidget(Widget):
         return False'''
 
     def update(self, dt):
-        if(self.asteroids):
-            print(self.asteroids[0].state)
         # Moves
         spaceship_moves_to_handler(self, dt)
         enemies_random_move_handler(self)

@@ -3,7 +3,8 @@ from kivy.uix.screenmanager import Screen
 from .go_init_canvas import init_asteroids, init_enemies
 from .game_constants import ASTEROID_WAITING_COUNT, ENEMY_WAITING_COUNT
 from game_utils.utils_methods import distance_2_points, a_b_function, linear_function
-from .game_objects.go_asteroid import AsteroidState
+from .game_objects.go_asteroid import Asteroid, AsteroidState
+from .game_objects.go_spaceship import Spaceship
 
 def immortal_color_handler(screen: Screen):
     s = screen.spaceship
@@ -43,23 +44,31 @@ def __game_level_icrement_handler(screen: Screen):
 
 
 def asteroids_state_handler(screen: Screen):
-    x2, y2 = screen.spaceship.body.pos
-    w, h = screen.spaceship.body.size
+    xs, ys = screen.spaceship.body.pos
+    ws, hs = screen.spaceship.body.size
     for a in screen.asteroids:
-        x1, y1 = a.body.pos
+        xa, ya = a.body.pos
         if (a.state == AsteroidState.RANDOM 
-            and distance_2_points(x1, y1, x2, y2) <=  w * 6): # replace 6 with constant
+            and distance_2_points(xa, ya, xs, ys) <=  ws * 6): # replace 6 with constant
             a.state = AsteroidState.FOLLOW
             screen.asteroids_canvas_color[a].rgba = (1, .8, .4, 1)
         elif (a.state == AsteroidState.FOLLOW
-              and distance_2_points(x1, y1, x2, y2) <= w * 3): # replace 3 with constant
+            and distance_2_points(xa, ya, xs, ys) <= ws * 3): # replace 3 with constant
             a.state = AsteroidState.PROJECTILE
             screen.asteroids_canvas_color[a].rgba = (1, 1, 0, 1)
-            la, lb = a_b_function(x2, x1, y2, y1)
-            if x1 < x2:
-                x_target = screen.width
+            la, lb = a_b_function(xs, ys, xa, ya)
+            if __going_right(xa, xs):
+                y_target = linear_function(la, lb, screen.width)
+                a.projectile_target_x = screen.width
+                a.projectile_target_y = y_target
             else:
-                x_target = 0
-            y_target = linear_function(la, lb, x_target)
-            a.projectile_target_x = x_target
-            a.projectile_target_y = y_target
+                y_target = linear_function(la, lb, 0)
+                a.projectile_target_x = 0
+                a.projectile_target_y = y_target
+
+
+def __going_right(x_asteroid: float, x_spaceship: float) -> bool:
+    if x_asteroid < x_spaceship:
+        return True
+    else:
+        return False

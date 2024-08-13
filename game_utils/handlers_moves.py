@@ -1,7 +1,7 @@
 from kivy.uix.screenmanager import Screen
 
 from .game_objects.go_asteroid import AsteroidState
-from .utils_methods import do_not_touch_spaceship, a_b_function, linear_function
+from .utils_methods import do_not_touch_spaceship
 
 from .game_constants import (
       SPACESHIP_MAX_FUEL_100,
