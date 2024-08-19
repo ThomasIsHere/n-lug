@@ -3,17 +3,15 @@ from kivy.uix.screenmanager import Screen
 from .go_init_canvas import init_asteroids, init_enemies
 from .game_constants import ASTEROID_WAITING_COUNT, ENEMY_WAITING_COUNT
 from game_utils.utils_methods import distance_2_points, a_b_function, linear_function
-from .game_objects.go_asteroid import Asteroid, AsteroidState
-from .game_objects.go_spaceship import Spaceship
+from .game_objects.go_asteroid import AsteroidState
 
-def immortal_color_handler(screen: Screen):
+
+def immortal_png_handler(screen: Screen):
     s = screen.spaceship
     if s.timer_immortal <= 0:
-        #screen.spaceship_canvas_color.rgba = (1, 1, 1, 1) # white
-        pass
+        s.body.source = 'assets/spaceship.png'
     else:
-        #screen.spaceship_canvas_color.rgba = (1, 1, 1, .4) # white 60% transparent
-        pass
+        s.body.source = 'assets/spaceship_shield.png'
 
 
 def immortal_timer_handler(screen: Screen):
@@ -26,7 +24,7 @@ def num_asteroids_handler(screen: Screen):
         screen.wainting_asteroid_counter -= 1
         if screen.wainting_asteroid_counter <= 0:
             num = screen.game_level * 2
-            screen.asteroids, screen.asteroids_canvas_color = init_asteroids(screen, num)
+            screen.asteroids = init_asteroids(screen, num)
             screen.wainting_asteroid_counter = ASTEROID_WAITING_COUNT
 
 
@@ -53,11 +51,9 @@ def asteroids_state_handler(screen: Screen):
         if (a.state == AsteroidState.RANDOM 
             and distance_2_points(xa, ya, xs, ys) <=  ws * 6): # replace 6 with constant
             a.state = AsteroidState.FOLLOW
-            screen.asteroids_canvas_color[a].rgba = (1, .8, .4, 1)
         elif (a.state == AsteroidState.FOLLOW
             and distance_2_points(xa, ya, xs, ys) <= ws * 3): # replace 3 with constant
             a.state = AsteroidState.PROJECTILE
-            screen.asteroids_canvas_color[a].rgba = (1, 1, 0, 1)
             la, lb = a_b_function(xs, ys, xa, ya)
             if __going_right(xa, xs):
                 y_target = linear_function(la, lb, screen.width)
@@ -74,3 +70,14 @@ def __going_right(x_asteroid: float, x_spaceship: float) -> bool:
         return True
     else:
         return False
+    
+
+def asteroids_png_handler(screen: Screen):
+    list_a = screen.asteroids
+    for a in list_a:
+        if a.state == AsteroidState.FOLLOW:
+            a.body.source = 'assets/asteroid_follow.png'
+        elif a.state == AsteroidState.PROJECTILE:
+            a.body.source = 'assets/asteroid_missile.png'
+        elif a.state == AsteroidState.RANDOM:
+            a.body.source = 'assets/asteroid.png'

@@ -1,5 +1,4 @@
-from kivy.graphics.vertex_instructions import Ellipse, Rectangle
-from kivy.graphics.context_instructions import Color
+from kivy.graphics.vertex_instructions import Rectangle
 from kivy.uix.screenmanager import Screen
 from random import randint, choice
 
@@ -11,8 +10,6 @@ from .game_objects.go_asteroid import Asteroid, AsteroidState
 from .game_constants import (
       SPACESHIP_HEIGHT,
       SPACESHIP_WIDTH,
-      #SCREEN_HEIGHT,
-      #SCREEN_WIDTH,
       ENEMY_WIDTH,
       ENEMY_HEIGHT,
       ENEMY_MAX_SPEED,
@@ -33,7 +30,6 @@ def init_spaceship(
             timer_immortal: int
             ) -> Spaceship:
         with screen.canvas:
-            #screen.spaceship_canvas_color = Color(1, 1, 1) # white
             body = Rectangle(
                         source = 'assets/spaceship.png',
                         pos=(start_x, start_y),
@@ -45,7 +41,6 @@ def init_spaceship(
 
 def __init_enemy(screen: Screen) -> Enemy:
       with screen.canvas:
-            #Color(1, 0, 0) # red
             body = Rectangle(
                   source = 'assets/enemy.png',
                   pos=__enmy_random_init_pos_away_spaceship(screen),
@@ -84,19 +79,16 @@ def init_enemies(screen: Screen, num: int) -> List[Enemy]:
 
 def init_asteroids(screen: Screen, num: int) -> List[Asteroid]:
       list_asteroids = []
-      dict_asteroids_colors = {}
       while(num > 0):
-            asteroid, asteroid_canvas_color = __init_asteroid(screen)
+            asteroid = __init_asteroid(screen)
             list_asteroids.append(asteroid)
-            dict_asteroids_colors[asteroid] = asteroid_canvas_color
             num-=1
-      return list_asteroids, dict_asteroids_colors
+      return list_asteroids
 
 
-def __init_asteroid(screen: Screen) -> tuple[Asteroid, object]:
+def __init_asteroid(screen: Screen) -> tuple[Asteroid]:
       start_x, start_y = __random_asteroid_position(screen)
       with screen.canvas:
-            screen.asteroid_canvas_color = Color(1, .6, .1) 
             body = Rectangle(
                   source = 'assets/asteroid.png',
                   pos=(start_x, start_y)
@@ -113,7 +105,7 @@ def __init_asteroid(screen: Screen) -> tuple[Asteroid, object]:
                   None,
                   None
             )
-            return asteroid, screen.asteroid_canvas_color
+            return asteroid
 
 
 def __random_asteroid_position(screen: Screen) -> tuple[int, int]:
@@ -122,7 +114,6 @@ def __random_asteroid_position(screen: Screen) -> tuple[int, int]:
       y = randint(0, hs - int(ASTEROID_HEIGHT))
       spaceship_x, spaceship_y = screen.spaceship.body.pos
       d = distance_2_points(x, x, spaceship_x, spaceship_y)
-      # enemy pops at least 7 times the distance of spaceship width
       if d > 7 * SPACESHIP_WIDTH:
             return (x, y)
       return __random_asteroid_position(screen)

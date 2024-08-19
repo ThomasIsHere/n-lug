@@ -13,16 +13,17 @@ from game_utils.handlers_collision import (
     collision_handler_asteroids
     )
 from game_utils.handlers_other import (
-    immortal_color_handler,
+    immortal_png_handler,
     immortal_timer_handler,
     num_asteroids_handler,
     num_enemies_handler,
-    asteroids_state_handler
+    asteroids_state_handler,
+    asteroids_png_handler
     )
 from game_utils.handlers_moves import (
     enemies_random_move_handler,
     spaceship_moves_to_handler,
-    asteroids_moves_handler,
+    asteroids_moves_handler
     )
 from game_utils.game_constants import (
       SPACESHIP_SPEED,
@@ -49,11 +50,7 @@ class GameWidget(Widget):
     spaceship = None
     enemies = None
     asteroids = None
-    asteroids_canvas_color = None
-    
-    # not needed defined and attached to GameWidget in init package
-    # spaceship_canvas_color = None
-    
+
     fuel_value = NumericProperty(0)
     lives_remaining = StringProperty("")
     game_level_label = StringProperty("")
@@ -79,7 +76,7 @@ class GameWidget(Widget):
                 SPACESHIP_START_LIVES,
                 0
             )
-        self.asteroids, self.asteroids_canvas_color = init_asteroids(self, self.game_level * 2)
+        self.asteroids = init_asteroids(self, self.game_level * 2)
         self.enemies = init_enemies(self, self.game_level * 3)
         self.dict_destination = {
                                 "go_to_x": ws / 2, 
@@ -110,8 +107,9 @@ class GameWidget(Widget):
         collision_handler_between_enemies(self)
         collision_handler_asteroids(self)
         # Others
-        immortal_color_handler(self)
+        immortal_png_handler(self)
         immortal_timer_handler(self)
         num_asteroids_handler(self)
         num_enemies_handler(self)
         asteroids_state_handler(self)
+        asteroids_png_handler(self)

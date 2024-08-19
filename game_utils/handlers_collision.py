@@ -4,7 +4,7 @@ from .game_objects.go_spaceship import Spaceship
 from .game_objects.go_enemy import Enemy
 from .game_objects.go_asteroid import Asteroid, AsteroidState
 
-from .game_constants import FPS, ASTEROID_SPEED
+from .game_constants import FPS
 
 from .utils_methods import spaceship_stops
 
@@ -61,7 +61,7 @@ def __collision_handler_asteroid_with_spaceship(a: Asteroid, screen: Screen):
 def __spaceship_lives_handler(screen: Screen):
       screen.spaceship.lives -=1
       screen.lives_remaining = str(screen.spaceship.lives)
-      screen.spaceship.timer_immortal = 4 * FPS # 4 * FPS fps
+      screen.spaceship.timer_immortal = 4 * FPS # put 4 in constant
 
 
 def __collision_handler_asteroid_with_enemies(a: Asteroid, screen: Screen):
@@ -85,4 +85,3 @@ def __collision_handler_asteroid_with_screen_borders(a: Asteroid, screen: Screen
             or y >= hs - h
             ):
             a.state = AsteroidState.RANDOM
-            screen.asteroids_canvas_color[a].rgba = (1, .6, .1, 1)
