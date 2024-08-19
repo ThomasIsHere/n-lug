@@ -9,9 +9,11 @@ from .game_objects.go_spaceship import Spaceship
 def immortal_color_handler(screen: Screen):
     s = screen.spaceship
     if s.timer_immortal <= 0:
-        screen.spaceship_canvas_color.rgba = (1, 1, 1, 1) # white
+        #screen.spaceship_canvas_color.rgba = (1, 1, 1, 1) # white
+        pass
     else:
-        screen.spaceship_canvas_color.rgba = (1, 1, 1, .4) # white 60% transparent
+        #screen.spaceship_canvas_color.rgba = (1, 1, 1, .4) # white 60% transparent
+        pass
 
 
 def immortal_timer_handler(screen: Screen):
