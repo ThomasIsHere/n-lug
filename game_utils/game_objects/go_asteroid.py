@@ -1,4 +1,4 @@
-from kivy.graphics.vertex_instructions import Ellipse
+from kivy.graphics import Ellipse
 from kivy.uix.screenmanager import Screen
 
 from typing import List

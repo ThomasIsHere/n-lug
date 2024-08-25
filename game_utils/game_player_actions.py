@@ -1,6 +1,3 @@
-from kivy.metrics import dp
-from kivy.clock import Clock
-
 from .utils_methods import speed_corrector
 
 

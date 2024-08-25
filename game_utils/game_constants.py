@@ -27,11 +27,6 @@ FPS = 60
 ASTEROID_WAITING_COUNT = FPS * 3
 ENEMY_WAITING_COUNT = FPS * 3
 
-# Set those values in auto
-# when screen will adapt to device size
-#SCREEN_WIDTH = 1299
-#SCREEN_HEIGHT = 540
-
 # Start game asteroid and enemies number
 START_ENEMIES = 1
 START_ASTEROID = 1

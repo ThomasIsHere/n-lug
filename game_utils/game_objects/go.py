@@ -1,13 +1,9 @@
-from kivy.graphics.vertex_instructions import Ellipse
+from kivy.graphics import Ellipse
 from kivy.uix.screenmanager import Screen
 
 from random import randint
 from typing import List
 
-#from game_utils.game_constants import (
-#      SCREEN_HEIGHT,
-#      SCREEN_WIDTH
-#      )
 from game_utils.utils_methods import distance_2_points, point_in_range
 
 

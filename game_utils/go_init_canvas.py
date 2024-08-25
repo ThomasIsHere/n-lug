@@ -1,4 +1,5 @@
-from kivy.graphics.vertex_instructions import Rectangle
+#from kivy.graphics.vertex_instructions import Rectangle
+from kivy.graphics import Rectangle, Rotate
 from kivy.uix.screenmanager import Screen
 from random import randint, choice
 

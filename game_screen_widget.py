@@ -61,7 +61,16 @@ class GameWidget(Widget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.bind(size=self.init_game)
+        #self.bind(size=self.init_game)
+        self.initialized = False  # Flag to track initialization
+        self.bind(size=self.check_init_game)  # Bind to check_init_game
+
+    def check_init_game(self, *args):
+        if not self.initialized and self.width > 1 and self.height > 1:
+            self.init_game()
+            self.initialized = True  # Set flag to True after initialization
+        #else:
+            #self.on_resize()  # Adjust elements on subsequent resizes
 
     def init_game(self, *args):
         ws = self.width
@@ -90,6 +99,9 @@ class GameWidget(Widget):
         self.wainting_asteroid_counter = ASTEROID_WAITING_COUNT
         self.wainting_enemy_counter = ENEMY_WAITING_COUNT
         Clock.schedule_interval(self.update, 1.0 / FPS)
+    
+    '''def on_resize(self, *args):
+        pass'''
 
     #  'win', 'linux', 'android', 'macosx', 'ios' or 'unknown'
     '''def is_desktop(self):
